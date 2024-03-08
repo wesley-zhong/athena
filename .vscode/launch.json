@@ -1,0 +1,31 @@
+{
+    "configurations": [
+      {
+        "name": "game",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/game/build/game",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}/",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "preLaunchTask": "build-game"
+      },
+      {
+        "name": "gateway",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${fileDirname}/game/src/main",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${fileDirname}/",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "preLaunchTask": "build"
+      }
+    ],
+    "version": "2.0.0"
+  }
