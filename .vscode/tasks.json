@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "cmake-common",
+			"label": "cmake-engine",
 			"type": "cppbuild",
 			"command": "cmake",
 			"args": [
@@ -10,11 +10,11 @@
 				".."
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/common/build"
+				"cwd": "${workspaceFolder}/engine/build"
 			},
 		},
 		{
-			"label": "make-common",
+			"label": "make-engine",
 			"group": {
 				"kind": "build",
 				"isDefault": true
@@ -22,9 +22,11 @@
 			"command": "make",
 			"args": ["-j8",], //根据机器cpu核心数量自行调整
 			"options": {
-				"cwd": "${workspaceFolder}/common/build"
+				"cwd": "${workspaceFolder}/engine/build"
 			},
 		},
+		
+
 		{
 			"label": "cmake-game",
 			"type": "cppbuild",
@@ -33,6 +35,18 @@
 				"..",
 				"-DCMAKE_BUILD_TYPE=Debug"
 			],
+			"options": {
+				"cwd": "${workspaceFolder}/game/build"
+			},
+		},
+		{
+			"label": "make-game-rm-bin",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"command": "rm",
+			"args": ["-f", "./game"], //根据机器cpu核心数量自行调整
 			"options": {
 				"cwd": "${workspaceFolder}/game/build"
 			},
@@ -53,7 +67,7 @@
 		{
 			"label": "build-game",
 			"dependsOrder": "sequence",
-			"dependsOn": ["cmake-common", "make-common", "cmake-game", "make-game"]
+			"dependsOn": ["cmake-engine", "make-engine", "cmake-game","make-game-rm-bin", "make-game"]
 		}		
 	]
 }

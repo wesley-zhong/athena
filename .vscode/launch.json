@@ -7,11 +7,12 @@
         "program": "${workspaceFolder}/game/build/game",
         "args": [],
         "stopAtEntry": false,
-        "cwd": "${fileDirname}/",
+        "cwd": "${workspaceFolder}/game/build/",
         "environment": [],
-        "externalConsole": false,
         "MIMode": "lldb",
-        "preLaunchTask": "build-game"
+        "preLaunchTask": "build-game",
+        "externalConsole": false,
+        "internalConsoleOptions": "openOnSessionStart",
       },
       {
         "name": "gateway",
@@ -23,6 +24,7 @@
         "cwd": "${fileDirname}/",
         "environment": [],
         "externalConsole": false,
+        "internalConsoleOptions": "openOnSessionStart",
         "MIMode": "lldb",
         "preLaunchTask": "build"
       }
