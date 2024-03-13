@@ -68,6 +68,7 @@
 			"label": "build-game",
 			"dependsOrder": "sequence",
 			"dependsOn": ["cmake-engine", "make-engine", "cmake-game","make-game-rm-bin", "make-game"]
-		}		
+		}
+		
 	]
 }

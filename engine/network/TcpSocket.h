@@ -34,15 +34,15 @@ public:
 protected:
 
 	virtual void on_msgbuffer(MessageBuffer * buffer){};
-	virtual void on_clsesocket(){};
-	virtual void on_writecomplete(){};
+	virtual void on_clsesocket()=0;
+	virtual void on_writecomplete()=0;
 
 private:
 
 	static void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf);
-	static void echo_read(uv_stream_t *tcp, ssize_t nread, const uv_buf_t *buf);
+	static void read(uv_stream_t *tcp, ssize_t nread, const uv_buf_t *buf);
 	static void on_uv_close(uv_handle_t* handle);
-	static void echo_write(uv_write_t *req, int status);
+	static void write(uv_write_t *req, int status);
 
 private:
 	uv_tcp_t m_uv_tcp;

@@ -15,18 +15,17 @@
         "internalConsoleOptions": "openOnSessionStart",
       },
       {
-        "name": "gateway",
+        "name": "engine-lua",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${fileDirname}/game/src/main",
-        "args": [],
+        "program":"${workspaceFolder}/engine-lua/build/engine-lua",
+        "args": ["${workspaceFolder}/engine-lua/script/server.lua"],
         "stopAtEntry": false,
-        "cwd": "${fileDirname}/",
+        "cwd": "${workspaceFolder}/engine-lua/build/",
         "environment": [],
         "externalConsole": false,
         "internalConsoleOptions": "openOnSessionStart",
         "MIMode": "lldb",
-        "preLaunchTask": "build"
       }
     ],
     "version": "2.0.0"

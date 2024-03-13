@@ -16,16 +16,6 @@ TcpServer::~TcpServer()
 
 int TcpServer::listen(const char * ip, int port, bool ipv6)
 {
-
-	/*
-	#ifdef USE_IPV6_ADDR
-	struct sockaddr_in6 mAddr;
-	uv_ip6_addr(ip, port, &mAddr);
-	#else
-	struct sockaddr_in mAddr;
-	uv_ip4_addr(ip, port, &mAddr);
-	#endif
-	*/
 	sockaddr_storage iaddr;
 	if (ipv6) {
 		uv_ip6_addr(ip, port, (sockaddr_in6*)&iaddr);

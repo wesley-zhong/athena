@@ -30,11 +30,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "fmacros.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
+#include <limits.h>
 #include "sds.h"
 #include "sdsalloc.h"
 
@@ -70,7 +72,7 @@ static inline char sdsReqType(size_t string_size) {
  * and 'initlen'.
  * If NULL is used for 'init' the string is initialized with zero bytes.
  *
- * The string is always null-termined (all the sds strings are, always) so
+ * The string is always null-terminated (all the sds strings are, always) so
  * even if you create an sds string with:
  *
  * mystring = sdsnewlen("abc",3);
@@ -88,6 +90,7 @@ sds sdsnewlen(const void *init, size_t initlen) {
     int hdrlen = sdsHdrSize(type);
     unsigned char *fp; /* flags pointer. */
 
+    if (hdrlen+initlen+1 <= initlen) return NULL; /* Catch size_t overflow */
     sh = s_malloc(hdrlen+initlen+1);
     if (sh == NULL) return NULL;
     if (!init)
@@ -172,7 +175,7 @@ void sdsfree(sds s) {
  * the output will be "6" as the string was modified but the logical length
  * remains 6 bytes. */
 void sdsupdatelen(sds s) {
-    int reallen = strlen(s);
+    size_t reallen = strlen(s);
     sdssetlen(s, reallen);
 }
 
@@ -194,7 +197,7 @@ void sdsclear(sds s) {
 sds sdsMakeRoomFor(sds s, size_t addlen) {
     void *sh, *newsh;
     size_t avail = sdsavail(s);
-    size_t len, newlen;
+    size_t len, newlen, reqlen;
     char type, oldtype = s[-1] & SDS_TYPE_MASK;
     int hdrlen;
 
@@ -203,7 +206,8 @@ sds sdsMakeRoomFor(sds s, size_t addlen) {
 
     len = sdslen(s);
     sh = (char*)s-sdsHdrSize(oldtype);
-    newlen = (len+addlen);
+    reqlen = newlen = (len+addlen);
+    if (newlen <= len) return NULL; /* Catch size_t overflow */
     if (newlen < SDS_MAX_PREALLOC)
         newlen *= 2;
     else
@@ -217,12 +221,10 @@ sds sdsMakeRoomFor(sds s, size_t addlen) {
     if (type == SDS_TYPE_5) type = SDS_TYPE_8;
 
     hdrlen = sdsHdrSize(type);
+    if (hdrlen+newlen+1 <= reqlen) return NULL; /* Catch size_t overflow */
     if (oldtype==type) {
         newsh = s_realloc(sh, hdrlen+newlen+1);
-        if (newsh == NULL) {
-            s_free(sh);
-            return NULL;
-        }
+        if (newsh == NULL) return NULL;
         s = (char*)newsh+hdrlen;
     } else {
         /* Since the header size changes, need to move the string forward,
@@ -416,7 +418,7 @@ sds sdscpylen(sds s, const char *t, size_t len) {
     return s;
 }
 
-/* Like sdscpylen() but 't' must be a null-termined string so that the length
+/* Like sdscpylen() but 't' must be a null-terminated string so that the length
  * of the string is obtained with strlen(). */
 sds sdscpy(sds s, const char *t) {
     return sdscpylen(s, t, strlen(t));
@@ -581,7 +583,7 @@ sds sdscatprintf(sds s, const char *fmt, ...) {
  */
 sds sdscatfmt(sds s, char const *fmt, ...) {
     const char *f = fmt;
-    int i;
+    long i;
     va_list ap;
 
     va_start(ap,fmt);
@@ -715,15 +717,20 @@ sds sdstrim(sds s, const char *cset) {
  *
  * The string is modified in-place.
  *
+ * Return value:
+ * -1 (error) if sdslen(s) is larger than maximum positive ssize_t value.
+ *  0 on success.
+ *
  * Example:
  *
  * s = sdsnew("Hello World");
  * sdsrange(s,1,-1); => "ello World"
  */
-void sdsrange(sds s, int start, int end) {
+int sdsrange(sds s, ssize_t start, ssize_t end) {
     size_t newlen, len = sdslen(s);
+    if (len > SSIZE_MAX) return -1;
 
-    if (len == 0) return;
+    if (len == 0) return 0;
     if (start < 0) {
         start = len+start;
         if (start < 0) start = 0;
@@ -734,9 +741,9 @@ void sdsrange(sds s, int start, int end) {
     }
     newlen = (start > end) ? 0 : (end-start)+1;
     if (newlen != 0) {
-        if (start >= (signed)len) {
+        if (start >= (ssize_t)len) {
             newlen = 0;
-        } else if (end >= (signed)len) {
+        } else if (end >= (ssize_t)len) {
             end = len-1;
             newlen = (start > end) ? 0 : (end-start)+1;
         }
@@ -746,18 +753,19 @@ void sdsrange(sds s, int start, int end) {
     if (start && newlen) memmove(s, s+start, newlen);
     s[newlen] = 0;
     sdssetlen(s,newlen);
+    return 0;
 }
 
 /* Apply tolower() to every character of the sds string 's'. */
 void sdstolower(sds s) {
-    int len = sdslen(s), j;
+    size_t len = sdslen(s), j;
 
     for (j = 0; j < len; j++) s[j] = tolower(s[j]);
 }
 
 /* Apply toupper() to every character of the sds string 's'. */
 void sdstoupper(sds s) {
-    int len = sdslen(s), j;
+    size_t len = sdslen(s), j;
 
     for (j = 0; j < len; j++) s[j] = toupper(s[j]);
 }
@@ -878,7 +886,7 @@ sds sdscatrepr(sds s, const char *p, size_t len) {
         case '\a': s = sdscatlen(s,"\\a",2); break;
         case '\b': s = sdscatlen(s,"\\b",2); break;
         default:
-            if (isprint(*p))
+            if (isprint((int) *p))
                 s = sdscatprintf(s,"%c",*p);
             else
                 s = sdscatprintf(s,"\\x%02x",(unsigned char)*p);
@@ -887,13 +895,6 @@ sds sdscatrepr(sds s, const char *p, size_t len) {
         p++;
     }
     return sdscatlen(s,"\"",1);
-}
-
-/* Helper function for sdssplitargs() that returns non zero if 'c'
- * is a valid hex digit. */
-int is_hex_digit(char c) {
-    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
-           (c >= 'A' && c <= 'F');
 }
 
 /* Helper function for sdssplitargs() that converts a hex digit into an
@@ -947,7 +948,7 @@ sds *sdssplitargs(const char *line, int *argc) {
     *argc = 0;
     while(1) {
         /* skip blanks */
-        while(*p && isspace(*p)) p++;
+        while(*p && isspace((int) *p)) p++;
         if (*p) {
             /* get a token */
             int inq=0;  /* set to 1 if we are in "quotes" */
@@ -958,8 +959,8 @@ sds *sdssplitargs(const char *line, int *argc) {
             while(!done) {
                 if (inq) {
                     if (*p == '\\' && *(p+1) == 'x' &&
-                                             is_hex_digit(*(p+2)) &&
-                                             is_hex_digit(*(p+3)))
+                                             isxdigit((int) *(p+2)) &&
+                                             isxdigit((int) *(p+3)))
                     {
                         unsigned char byte;
 
@@ -983,7 +984,7 @@ sds *sdssplitargs(const char *line, int *argc) {
                     } else if (*p == '"') {
                         /* closing quote must be followed by a space or
                          * nothing at all. */
-                        if (*(p+1) && !isspace(*(p+1))) goto err;
+                        if (*(p+1) && !isspace((int) *(p+1))) goto err;
                         done=1;
                     } else if (!*p) {
                         /* unterminated quotes */
@@ -998,7 +999,7 @@ sds *sdssplitargs(const char *line, int *argc) {
                     } else if (*p == '\'') {
                         /* closing quote must be followed by a space or
                          * nothing at all. */
-                        if (*(p+1) && !isspace(*(p+1))) goto err;
+                        if (*(p+1) && !isspace((int) *(p+1))) goto err;
                         done=1;
                     } else if (!*p) {
                         /* unterminated quotes */

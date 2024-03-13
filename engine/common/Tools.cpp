@@ -66,28 +66,24 @@ int Tools::binarySearch(int arr[], int len, int findX)
 	return -1;
 }
 
-#ifdef SYSTEM_LINUX
-
-#include <iconv.h>
 
 static int iconv_convert(const char *src_str, size_t src_len, char *dst_str, size_t dst_len, const char * from_charset = "gbk", const char * to_charset = "utf8")
 {
-	iconv_t cd;
-	char **pin = (char **)&src_str;
-	char **pout = &dst_str;
+	// iconv_t cd;
+	// char **pin = (char **)&src_str;
+	// char **pout = &dst_str;
 
-	cd = iconv_open(to_charset, from_charset);
-	if (cd == 0)
-		return -1;
-	memset(dst_str, 0, dst_len);
-	if (iconv(cd, pin, &src_len, pout, &dst_len) == -1)
-		return -1;
-	iconv_close(cd);
+	// cd = iconv_open(to_charset, from_charset);
+	// if (cd == 0)
+	// 	return -1;
+	// memset(dst_str, 0, dst_len);
+	// if (iconv(cd, pin, &src_len, pout, &dst_len) == -1)
+	// 	return -1;
+	// iconv_close(cd);
 
 	return 0;
 }
 
-#endif
 
 std::string Tools::gbkToUtf8(const char *src_str)
 {

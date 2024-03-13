@@ -18,7 +18,6 @@ set(LUA ${PROJECT_SOURCE_DIR}/../3rd/lua)
 set(ENGINE_COMMON ${PROJECT_SOURCE_DIR}/common)
 set(ENGINE_DB ${PROJECT_SOURCE_DIR}/db)
 set(ENGINE_NETWORK ${PROJECT_SOURCE_DIR}/network)
-set(ENGINE_SRCRIPT ${PROJECT_SOURCE_DIR}/script/)
 set(ENGINE_SERVERIAL ${PROJECT_SOURCE_DIR}/serialization)
 set(ENGINE_UTILS ${PROJECT_SOURCE_DIR}/utils)
 
@@ -31,7 +30,6 @@ include_directories(${LIBUV}/include
     ${ENGINE_COMMON}
     ${ENGINE_DB}
     ${ENGINE_NETWORK}
-    ${ENGINE_SRCRIPT}
     ${ENGINE_SERVERIAL}
     ${ENGINE_UTILS}
     )
@@ -45,8 +43,8 @@ aux_source_directory(${ENGINE_SERVERIAL}/  SERIAL_CPP_FILES)
 aux_source_directory(${ENGINE_UTILS}/  UTILS_CPP_FILES)
 
 
-message("======== begin to configure game libsDir: ${PROJECT_SOURCE_DIR}/../libs")
-message("======== begin to configure game libs: ${PROJECT_LINK_LIBS}")
+message("======== begin to configure game db: ${DB_CPP_FILES}")
+message("======== begin to configure game libs: ${NET_WORK_CPP_FILES}")
 #message("======== begin to configure game cpps:  ${COMMON_CPP_FILES}")
 
 

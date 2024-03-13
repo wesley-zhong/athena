@@ -80,18 +80,14 @@ void NetConnect::sendMsg(uint32 msgtype, NetPacket * pack)
 	NetPacket * packet = createPacket();
 	packet->moveData(pack);
 	packet->writeHead(msgtype);
-
 	TcpSocket::write(packet);
 }
 
 void NetConnect::sendMsg(uint32 msgtype, const char* msg, uint32 len)
 {
-
 	NetPacket *pack = createPacket();
-
 	pack->append(msg, len);
 	pack->writeHead(msgtype);
-
 	TcpSocket::write(pack);
 }
 
