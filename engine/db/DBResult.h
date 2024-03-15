@@ -11,6 +11,5 @@ public:
 
 	virtual const char * getData(int & len) = 0;
 	virtual const char * getData() = 0;
-
 };
 

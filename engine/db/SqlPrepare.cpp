@@ -45,7 +45,7 @@ SqlPrepare::~SqlPrepare()
 		for (int i = 0; i < m_count; ++i)
 		{
 			MYSQL_BIND* pBind = &m_paramBind[i];
-			if(pBind->buffer) delete [] pBind->buffer;
+			if(pBind->buffer) delete [] reinterpret_cast<char*>(pBind->buffer);
 		}
 
 		delete[]m_paramBind;
