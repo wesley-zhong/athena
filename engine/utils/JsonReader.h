@@ -11,7 +11,7 @@ namespace jwEngine
 		friend JsonReader;
 	public:
 		JsonBuff(const char *str) { p = (char *)str; }
-		~JsonBuff() { if (obj != nullptr) { delete obj; obj = nullptr; } }
+		~JsonBuff();
 
 		// delete function
 		JsonBuff(JsonBuff &) = delete;

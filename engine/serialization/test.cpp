@@ -15,10 +15,10 @@ public:
 	{
 		printf("%d|%d|%s|%s\n", tinfo->type, tinfo->value, tinfo->name.c_str(), name);
 	}
-	// ¶¨Òå±äÁ¿
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	virtual void onVariable(TypeInfo * tinfo, const char * varName, const char * exp)
 	{
-		printf("var£º %d|%d|%s|%s = %s\n", tinfo->type, tinfo->value, tinfo->name.c_str(), varName, exp);
+		printf("varï¿½ï¿½ %d|%d|%s|%s = %s\n", tinfo->type, tinfo->value, tinfo->name.c_str(), varName, exp);
 	}
 
 	virtual void onEnterStruct(const char * name)
@@ -44,7 +44,7 @@ public:
 	}
 	virtual void onReadWriteVar(TypeInfo * tinfo, const char * varName)
 	{
-		printf("read write£º %d|%d|%s|%s \n", tinfo->type, tinfo->value, tinfo->name.c_str(), varName);
+		printf("read write %d|%d|%s|%s \n", tinfo->type, tinfo->value, tinfo->name.c_str(), varName);
 	}
 	virtual void onValue(const char * varName, const char * exp)
 	{

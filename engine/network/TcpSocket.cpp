@@ -53,7 +53,6 @@ int TcpSocketBase::localPort() const
 	int addr_len = sizeof(addr);
 	uv_tcp_getsockname(&m_uv_tcp, (sockaddr*)&addr, &addr_len);
 
-	char endpoint[64] = { 0 };
 	if (addr.ss_family == AF_INET) {
 		sockaddr_in *s = (sockaddr_in*)&addr;
 		return ntohs(s->sin_port);
@@ -88,8 +87,6 @@ int TcpSocketBase::remotePort() const
 	sockaddr_storage addr;
 	int addr_len = sizeof(addr);
 	uv_tcp_getpeername(&m_uv_tcp, (sockaddr*)&addr, &addr_len);
-
-	char endpoint[64] = { 0 };
 	if (addr.ss_family == AF_INET) {
 		sockaddr_in *s = (sockaddr_in*)&addr;
 		return ntohs(s->sin_port);

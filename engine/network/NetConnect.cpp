@@ -4,9 +4,10 @@
 #include "NetEvent.h"
 
 NetConnect::NetConnect(NetEvent * nevent,uint32 buffersize) :
-	_netevent(nevent),
 	TcpSocket(buffersize),
-	mReadPacket(NULL)
+	mReadPacket(NULL),
+	_netevent(nevent)
+
 {
 }
 

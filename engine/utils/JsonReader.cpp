@@ -4,6 +4,9 @@
 
 using namespace jwEngine;
 
+JsonBuff::~JsonBuff(){
+		if (obj != nullptr) { delete obj; obj = nullptr; } ;
+}
 bool JsonReader::readStr(std::string & outstr, JsonBuff * buff)
 {
 	const char * str = buff->curr();

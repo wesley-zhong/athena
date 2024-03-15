@@ -27,7 +27,7 @@ void start(std::string & dir, std::string & name, Token * token)
 		std::ofstream fout(dir + name + ".h");
 		if (!fout.is_open())
 		{
-			std::cout << "文件不能打开" << std::endl;
+			std::cout << "锟侥硷拷锟斤拷锟杰达拷" << std::endl;
 		}
 		else
 		{
@@ -40,7 +40,7 @@ void start(std::string & dir, std::string & name, Token * token)
 		std::ofstream fout(dir + name + ".cpp");
 		if (!fout.is_open())
 		{
-			std::cout << "文件不能打开" << std::endl;
+			std::cout << "锟侥硷拷锟斤拷锟杰达拷" << std::endl;
 		}
 		else
 		{
@@ -65,7 +65,7 @@ void start(std::string & dir, std::string & name, Token * token)
 		std::ofstream fout(dir + name + ".lua");
 		if (!fout.is_open())
 		{
-			std::cout << "文件不能打开" << std::endl;
+			std::cout << "some error" << std::endl;
 		}
 		else
 		{

@@ -63,9 +63,10 @@
 
 WebSocketConnect::WebSocketConnect(WebSocketEvent * wevent, uint32 buffersize):
 	TcpSocket(buffersize),
+		__m_isHandshake(false),
 	__m_webevent(wevent),
-	__m_readPacket(NULL),
-	__m_isHandshake(false)
+	__m_readPacket(NULL)
+
 {
 }
 

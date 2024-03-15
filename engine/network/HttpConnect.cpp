@@ -1,7 +1,10 @@
 #include <string_view>
+#include <sstream>
+#include <string>
 #include "HttpConnect.h"
 #include "BasePacket.h"
 #include "CommonPool.h"
+
 
 /*
 -----------------
@@ -57,10 +60,13 @@ void HttpConnect::sendData(std::string_view sv)
 
 void HttpConnect::autoMsg(std::string_view sv, enum http_content_type type)
 {
-	static char buff[1024];
-	sprintf(buff, "HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %d\r\n\r\n", getContentTypeStr(type), sv.size());
+	std::stringstream  sstr;
+	sstr <<"HTTP/1.1 200 OK\r\nContent-Type: "<< getContentTypeStr(type) <<"\r\nContent-Length:"<<sv.size() <<"\r\n\r\n";
+//	static char buff[1024];
+//	sprintf(buff, "HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %d\r\n\r\n", getContentTypeStr(type), sv.size());
 	BasePacket * pack = createPacket();
-	pack->append(buff, strlen(buff));
+	std::string body = sstr.str();
+	pack->append((const uint8*)body.c_str(), body.length());
 	pack->append((const uint8*)sv.data(), sv.size());
 	TcpSocket::write(pack);
 }

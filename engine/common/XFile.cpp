@@ -44,11 +44,12 @@ int XFile::mkdir(const char * dir)
 
 int XFile::rmdir(const char * dir)
 {
-#ifdef SYSTEM_WIN
-	return _rmdir(dir);
-#else
-	return rmdir(dir);
-#endif
+// #ifdef SYSTEM_WIN
+// 	return _rmdir(dir);
+// #else
+// 	return rmdir(dir);
+// #endif
+return 0;
 }
 
 int XFile::createDirectory(const char * dir)
@@ -101,7 +102,6 @@ int XFile::readFile(const char *file, std::vector<std::string> & vec_str)
 	std::ifstream ifile(file);
 	if (ifile.is_open())
 	{
-		int row = 0;
 		while (ifile.good())
 		{
 			std::string line;
@@ -133,10 +133,10 @@ int XFile::listFiles(const char * dir, std::vector<std::string> & vec_file)
 		return -1;
 	}
 	do {
-		//ÅÐ¶ÏÊÇ·ñÓÐ×ÓÄ¿Â¼
+		//ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼
 		if (FileInfo.attrib & _A_SUBDIR)
 		{
-			//Õâ¸öÓï¾äºÜÖØÒª
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª
 			if ((strcmp(FileInfo.name, ".") != 0) && (strcmp(FileInfo.name, "..") != 0))
 			{
 				std::string newPath = folderPath + "\\" + FileInfo.name;
@@ -166,7 +166,7 @@ int XFile::listFiles(const char * dir, std::vector<std::string> & vec_file)
 	while ((p = readdir(open_dir)) != nullptr) {
 		struct stat st;
 		if (p->d_name[0] != '.') {
-			//ÒòÎªÊÇÊ¹ÓÃdevC++ »ñÈ¡windowsÏÂµÄÎÄ¼þ£¬ËùÒÔÊ¹ÓÃÁË "\" ,linuxÏÂÒª»»³É"/"
+			//ï¿½ï¿½Îªï¿½ï¿½Ê¹ï¿½ï¿½devC++ ï¿½ï¿½È¡windowsï¿½Âµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ "\" ,linuxï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½"/"
 			std::string name = folderPath + std::string("\\") + std::string(p->d_name);
 			stat(name.c_str(), &st);
 			if (S_ISDIR(st.st_mode)) {

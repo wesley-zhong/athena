@@ -9,11 +9,11 @@ public:
     static T *Instance()
     {
 
-        return &_instance;
+        return _instance;
     }
 
 protected:
-    static T _instance;
+    static T* _instance;
     // Disable compiler generated code to prevent default constuction/destruction
     // and copy/assignment semantics.
     Singleton() {}
@@ -21,5 +21,6 @@ protected:
     Singleton(Singleton const &) {}
     Singleton &operator=(Singleton const &) {}
 };
-
+template <class T> T* Singleton<T> ::_instance = new T();
 #endif // SRC_UTILS_SINGLETON_H_
+

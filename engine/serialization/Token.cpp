@@ -220,7 +220,6 @@ void Token::read_long_string()
 		switch (__m_pBuffer->current())
 		{
 		case eKw_EOF:
-			printf("多行注释未找到结尾\n");
 			assert(0);
 			break;
 
