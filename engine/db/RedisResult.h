@@ -13,6 +13,7 @@
 #include <cstring>
 #include "BasePacket.h"
 #include "hiredis.h"
+#include <string>
 
 // class BasePacket;
 // struct redisReply;
