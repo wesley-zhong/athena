@@ -10,7 +10,6 @@
 #include "XLog.h"
 #include "BaseType.h"
 #include "DBResult.h"
-#include <cstring>
 #include "BasePacket.h"
 #include "hiredis.h"
 #include <string>
@@ -44,7 +43,7 @@ public:
 
 		// blob
 		const char * p = m_reply->str ? m_reply->str : m_reply->element[pos]->str;
-		std::memcpy(&t, p, sizeof(t));
+		memcpy(&t, p, sizeof(t));
 
 		pos++;
 		return *this;
