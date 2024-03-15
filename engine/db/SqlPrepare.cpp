@@ -62,7 +62,7 @@ void SqlPrepare::clear()
 
 static void SetParameterValue(MYSQL_BIND* param, enum_field_types type, const void* value, uint32 len, bool isUnsigned)
 {
-	if (param->buffer) delete[] param->buffer;
+	if (param->buffer) delete[] (char*)param->buffer;
 
 	param->buffer_type = type;
 	param->buffer = new char[len];
@@ -192,7 +192,7 @@ int SqlPrepare::execute(DBResult* resultSet)
 
 	if (result)
 	{
-		std::shared_ptr<void> free_res(nullptr, [result](void*) { mysql_free_result(result); });
+		std::shared_ptr<void*> free_res(nullptr, [result](void*) { mysql_free_result(result); });
 
 		if (resultSet)
 		{
