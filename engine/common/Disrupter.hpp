@@ -25,7 +25,7 @@ public:
             // std::this_thread::yield(); // Optional spin-wait
         }
     }
-    size_t load(){
+    size_t load() const{
         return sequence_.load();
     }
 
