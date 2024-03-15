@@ -193,7 +193,7 @@ int SqlPrepare::execute(DBResult* resultSet)
 
 	if (result)
 	{
-		std::shared_ptr<void*> free_res(nullptr, [result](void*) { mysql_free_result(result); });
+		//std::shared_ptr<void*> free_res(nullptr, [result](void*) { mysql_free_result(result); });
 
 		if (resultSet)
 		{
