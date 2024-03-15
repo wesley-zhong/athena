@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <cstring>
 
 class SqlField
 {
@@ -24,7 +25,7 @@ public:
 	{
 		m_len = len;
 		m_buff = new char[len];
-		std::memcpy(m_buff, pdata, len);
+		memcpy(m_buff, pdata, len);
 	}
 
 	bool isEmpty()
@@ -39,7 +40,7 @@ public:
 	T getValue()
 	{
 		T val;
-		std::memcpy(&val, m_buff, sizeof(T));
+		memcpy(&val, m_buff, sizeof(T));
 		return val;
 	}
 
