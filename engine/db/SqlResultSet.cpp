@@ -112,7 +112,7 @@ void SqlResultSet::setResult(MYSQL_STMT* stmt, MYSQL_RES* pResult, uint64 pRowCo
 	{
 		m_fields.resize(uint32(pRowCount) * pFieldCount);
 
-		// Ìî³ä×Ö¶ÎÊý¾Ý
+		// ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½
 		int rowIndex = 0;
 		while (_fetch(stmt))
 		{
@@ -136,7 +136,7 @@ void SqlResultSet::setResult(MYSQL_STMT* stmt, MYSQL_RES* pResult, uint64 pRowCo
 	for (int i = 0; i< pFieldCount; ++i)
 	{
 		MYSQL_BIND* pBind = &resultBind[i];
-		if(pBind->buffer) delete [] pBind->buffer;
+		if(pBind->buffer) delete [] (char*)pBind->buffer;
 	}
 
 	delete[] resultBind;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdio.h>
-#include <string>
+#include <cstring>
 
 class SqlField
 {
@@ -24,7 +24,7 @@ public:
 	{
 		m_len = len;
 		m_buff = new char[len];
-		memcpy(m_buff, pdata, len);
+		std::memcpy(m_buff, pdata, len);
 	}
 
 	bool isEmpty()
@@ -39,7 +39,7 @@ public:
 	T getValue()
 	{
 		T val;
-		memcpy(&val, m_buff, sizeof(T));
+		std::memcpy(&val, m_buff, sizeof(T));
 		return val;
 	}
 
