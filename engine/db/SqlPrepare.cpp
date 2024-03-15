@@ -8,6 +8,7 @@
 #include "BasePacket.h"
 #include <assert.h>
 #include "SqlResultSet.h"
+#include <memory.h>
 
 SqlPrepare::SqlPrepare(const char * sqlstr)
 {
