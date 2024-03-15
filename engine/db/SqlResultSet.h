@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdio.h>
-#include <cstring>
+#include <iostream>
 
 class SqlField
 {
