@@ -29,11 +29,13 @@ include_directories(${LIBUV}/include
     ${3RD}
     ${3RD}/mysql
     ${3RD}/hiredis
+    ${ENGINE_DIR}
     ${ENGINE_COMMON}
     ${ENGINE_DB}
     ${ENGINE_NETWORK}
     ${ENGINE_SERVERIAL}
     ${ENGINE_UTILS}
+    ${PROJECT_SOURCE_DIR}/src/service
     )
 
 # 获取路径下所有的.cpp/.c/.cc文件，并赋值给变量中
@@ -41,7 +43,7 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/src  CPP_FILES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/service  CPP_SERVICES)
 
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
-set (PROJECT_LINK_LIBS uv lua engine engine_lua_lib)
+set (PROJECT_LINK_LIBS uv lua engine enginelua)
 message("======== begin to configure game libsDir: ${PROJECT_SOURCE_DIR}/../libs") 
 message("======== begin to configure game libs: ${PROJECT_LINK_LIBS}")
 message("======== begin to configure game cpps:  ${CPP_FILES}")

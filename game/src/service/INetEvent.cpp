@@ -21,6 +21,6 @@ void INetEvent::onMsg(NetConnect *conn, int msgtype, NetPacket *pack)
     netPacket->pushString("hello");
     conn->sendMsg(122 , netPacket);
 
-    Dispatcher::dispatcher(1);
+   // Dispatcher::dispatcher(1);
   //  }
 }
