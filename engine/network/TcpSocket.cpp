@@ -120,7 +120,6 @@ void TcpSocketBase::alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_
 
 void TcpSocketBase::read(uv_stream_t *tcp, ssize_t nread, const uv_buf_t *buf)
 {
-
 	if (nread < 0)
 	{
 		/*

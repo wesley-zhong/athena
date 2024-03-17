@@ -48,9 +48,8 @@ void TcpServer::on_new_connection(uv_stream_t *server, int status)
 	connect->clear();
 	connect->init_uv_tcp(self->mLoop);
 	if (connect->accept(server) == 0) {
-
-		connect->on_read_start();
 		self->onSocket(connect);
+		connect->on_read_start();
 	}
 	else {
 		uv_close((uv_handle_t*)connect->getUvTcp(), NULL);
