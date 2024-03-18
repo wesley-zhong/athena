@@ -15,7 +15,7 @@ DBInterfaceMysql::DBInterfaceMysql(const char * host, const char * dbname, const
 
 	if (!mysql_init(&mMysql_))
 	{
-		ERROR_LOG("mysql init error!!");
+		ERR_LOG("mysql init error!!");
 	}
 }
 
@@ -28,20 +28,20 @@ bool DBInterfaceMysql::connect()
 {
 	if (mysql_options(&mMysql_, MYSQL_SET_CHARSET_NAME, "utf8"))
 	{
-		ERROR_LOG("mysql_options(MYSQL_SET_CHARSET_NAME) Errno:%d failed: %s", getErrno(), getError());
+		ERR_LOG("mysql_options(MYSQL_SET_CHARSET_NAME) Errno:%d failed: %s", getErrno(), getError());
 		return false;
 	}
 
 	my_bool reconnect = 1;
 	if (mysql_options(&mMysql_, MYSQL_OPT_RECONNECT, &reconnect))
 	{
-		ERROR_LOG("mysql_options(MYSQL_OPT_RECONNECT) Errno:%d failed: %s", getErrno(), getError());
+		ERR_LOG("mysql_options(MYSQL_OPT_RECONNECT) Errno:%d failed: %s", getErrno(), getError());
 		return false;
 	}
 
 	if (!mysql_real_connect(&mMysql_, m_ip.c_str(), m_user.c_str(), m_pswd.c_str(), m_dbname.c_str(), m_port, NULL, 0))
 	{
-		ERROR_LOG("mysql_real_connect Errno:%d error: %s", getErrno(), getError());
+		ERR_LOG("mysql_real_connect Errno:%d error: %s", getErrno(), getError());
 		return false;
 	}
 
@@ -59,7 +59,7 @@ int DBInterfaceMysql::execute(DBResult * result, const char * cmd, int len)
 	int nResult = mysql_real_query(&mMysql_, cmd, (len <= 0 ? strlen(cmd) : len));
 	if (nResult != 0)
 	{
-		ERROR_LOG("mysql_real_query Errno:%d error: %s", getErrno(), getError());
+		ERR_LOG("mysql_real_query Errno:%d error: %s", getErrno(), getError());
 		return -1;
 	}
 

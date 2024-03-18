@@ -22,7 +22,7 @@ bool DBInterfaceRedis::connect()
 	redisContext* c = redisConnect(m_ip.c_str(), (int)m_port);
 	if (c->err)
 	{
-		ERROR_LOG("DBInterfaceRedis::attach: errno=%d, error=%s\n", c->err, c->errstr);
+		ERR_LOG("DBInterfaceRedis::attach: errno=%d, error=%s\n", c->err, c->errstr);
 
 		redisFree(c);
 		return false;
@@ -51,7 +51,7 @@ int DBInterfaceRedis::execute(DBResult * result, const char * cmd, int len)
 	redisReply *pRedisReply = (redisReply*)redisCommand(m_context, cmd);
 	if (m_context->err)
 	{
-		ERROR_LOG("DBInterfaceRedis::query: cmd=%s, errno=%d, error=%s\n", cmd, m_context->err, m_context->errstr);
+		ERR_LOG("DBInterfaceRedis::query: cmd=%s, errno=%d, error=%s\n", cmd, m_context->err, m_context->errstr);
 		return -1;
 	}
 	//freeReplyObject(pRedisReply);
@@ -85,7 +85,7 @@ bool DBInterfaceRedis::ping()
 
 	if (NULL == pRedisReply)
 	{
-		ERROR_LOG("DBInterfaceRedis::ping: errno=%d, error=%s\n",
+		ERR_LOG("DBInterfaceRedis::ping: errno=%d, error=%s\n",
 			m_context->err, m_context->errstr);
 
 		return false;
@@ -93,7 +93,7 @@ bool DBInterfaceRedis::ping()
 
 	if (!(pRedisReply->type == REDIS_REPLY_STATUS && strcmp(pRedisReply->str, "PONG") == 0))
 	{
-		ERROR_LOG("DBInterfaceRedis::ping: errno=%d, error=%s\n",
+		ERR_LOG("DBInterfaceRedis::ping: errno=%d, error=%s\n",
 			m_context->err, pRedisReply->str);
 
 		freeReplyObject(pRedisReply);

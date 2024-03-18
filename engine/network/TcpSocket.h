@@ -33,7 +33,7 @@ public:
 
 protected:
 
-	virtual void on_msgbuffer(MessageBuffer * buffer){};
+	virtual void on_msgbuffer(MessageBuffer * buffer)=0;
 	virtual void on_clsesocket()=0;
 	virtual void on_writecomplete()=0;
 

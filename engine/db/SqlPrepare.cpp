@@ -36,7 +36,7 @@ SqlPrepare::~SqlPrepare()
 	{
 		if (mysql_stmt_close(m_stmt))
 		{
-			ERROR_LOG(mysql_stmt_error(m_stmt));
+			ERR_LOG(mysql_stmt_error(m_stmt));
 		}
 		m_stmt = NULL;
 	}
@@ -177,7 +177,7 @@ int SqlPrepare::prepare(MYSQL * mysql)
 
 	if (mysql_stmt_param_count(m_stmt) != m_count)
 	{
-		ERROR_LOG("mysql_stmt_param_count(m_stmt) != m_count");
+		ERR_LOG("mysql_stmt_param_count(m_stmt) != m_count");
 		assert(0);
 	}
 

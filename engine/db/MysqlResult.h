@@ -28,7 +28,7 @@ public:
 	{
 		if (pos >= getFieldsCount())
 		{
-			ERROR_LOG("mysql row count upper limit");
+			ERR_LOG("mysql row count upper limit");
 			return *this;
 		}
 		std::istringstream ins(aRow[pos]);

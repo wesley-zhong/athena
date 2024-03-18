@@ -25,11 +25,13 @@ set(ENGINE_DB ${ENGINE_DIR}/db)
 set(ENGINE_NETWORK ${ENGINE_DIR}/network)
 set(ENGINE_SERVERIAL ${ENGINE_DIR}/serialization)
 set(ENGINE_UTILS ${ENGINE_DIR}/utils)
+set(SPDLOG ${PROJECT_SOURCE_DIR}/../3rd/spdlog)
 
 include_directories(${LIBUV}/include
     ${SOL2}/include
     ${LUA}
     ${3RD}
+    ${SPDLOG}/include
     ${3RD}/mysql
     ${3RD}/hiredis
     ${ENGINE_COMMON}

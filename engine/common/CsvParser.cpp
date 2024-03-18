@@ -35,7 +35,7 @@ CsvParser::CsvParser(const char * file, int startline, char sep) :
 	}
 	else
 	{
-		ERROR_LOG("Failed to open %s", file);
+		ERR_LOG("Failed to open %s", file);
 	}
 }
 

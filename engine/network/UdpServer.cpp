@@ -27,14 +27,14 @@ int UdpServer::start(const char * ip, int port, bool ipv6)
 	int errcode = uv_udp_bind(&_m_udp, (const struct sockaddr *)&iaddr, UV_UDP_REUSEADDR);
 	if (errcode)
 	{
-		ERROR_LOG("uv_udp_bind error %s\n", uv_strerror(errcode));
+		ERR_LOG("uv_udp_bind error %s\n", uv_strerror(errcode));
 		return -1;
 	}
 
 	errcode = uv_udp_recv_start(&_m_udp, alloc_buffer, on_read);
 	if (errcode)
 	{
-		ERROR_LOG("uv_udp_recv_start error %s\n", uv_strerror(errcode));
+		ERR_LOG("uv_udp_recv_start error %s\n", uv_strerror(errcode));
 		return -1;
 	}
 

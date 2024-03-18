@@ -26,7 +26,7 @@ int UdpClient::connect(const char * server_ip, int server_port, int port, bool i
 
 	if (err_code < 0)
 	{
-	ERROR_LOG("uv_ip4_addr error %s\n", uv_strerror(err_code));
+	ERR_LOG("uv_ip4_addr error %s\n", uv_strerror(err_code));
 	return -1;
 	}
 
@@ -38,20 +38,20 @@ int UdpClient::connect(const char * server_ip, int server_port, int port, bool i
 
 	if (err_code < 0)
 	{
-	ERROR_LOG("uv_ip4_addr error %s\n", uv_strerror(err_code));
+	ERR_LOG("uv_ip4_addr error %s\n", uv_strerror(err_code));
 	return -2;
 	}
 
 	err_code = uv_udp_bind(&_udp, (sockaddr *)&_listen_addr, 0);
 	if (err_code < 0)
 	{
-	ERROR_LOG("uv_udp_bind error %s\n", uv_strerror(err_code));
+	ERR_LOG("uv_udp_bind error %s\n", uv_strerror(err_code));
 	return -3;
 	}
 	err_code = uv_udp_recv_start(&_udp, UdpClient::alloc_buffer, UdpClient::on_read);
 	if (err_code < 0)
 	{
-	ERROR_LOG("uv_udp_recv_start error %s\n", uv_strerror(err_code));
+	ERR_LOG("uv_udp_recv_start error %s\n", uv_strerror(err_code));
 	return -4;
 	}
 
@@ -71,14 +71,14 @@ int UdpClient::connect(const char * server_ip, int server_port, bool ipv6)
 
 	if (err_code < 0)
 	{
-		ERROR_LOG("uv_ip4_addr error %s\n", uv_strerror(err_code));
+		ERR_LOG("uv_ip4_addr error %s\n", uv_strerror(err_code));
 		return -1;
 	}
 
 	err_code = uv_udp_recv_start(&_udp, UdpClient::alloc_buffer, UdpClient::on_read);
 	if (err_code < 0)
 	{
-		ERROR_LOG("uv_udp_recv_start error %s\n", uv_strerror(err_code));
+		ERR_LOG("uv_udp_recv_start error %s\n", uv_strerror(err_code));
 		return -2;
 	}
 

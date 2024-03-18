@@ -18,8 +18,6 @@ public:
 	}
 
 protected:
-
-
 	virtual void onAccept(NetConnect * conn) {
 		on_accept(conn);
 	};

@@ -1,0 +1,3 @@
+/Volumes/MacintoshHD2/c++/athena/engine-lua/lib/build/CMakeFiles/engineLua.dir
+/Volumes/MacintoshHD2/c++/athena/engine-lua/lib/build/CMakeFiles/edit_cache.dir
+/Volumes/MacintoshHD2/c++/athena/engine-lua/lib/build/CMakeFiles/rebuild_cache.dir

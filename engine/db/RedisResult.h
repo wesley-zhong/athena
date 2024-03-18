@@ -37,7 +37,7 @@ public:
 	{
 		if (pos >= getFieldsCount())
 		{
-			ERROR_LOG("redis row count upper limit");
+			ERR_LOG("redis row count upper limit");
 			return *this;
 		}
 

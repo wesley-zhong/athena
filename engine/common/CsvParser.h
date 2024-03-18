@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CSVPARSER_H_
+#define CSVPARSER_H_
 #include <string>
 # include <sstream>
 #include <vector>
@@ -54,4 +55,4 @@ private:
 	std::vector<std::string> _header;
 	std::vector<CsvRow> _content;
 };
-
+#endif

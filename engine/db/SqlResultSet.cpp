@@ -66,7 +66,7 @@ static void allocateResultBuffer(MYSQL_BIND* bind, MYSQL_FIELD* field)
 			bind->buffer = new char[bind->buffer_length];
 			break;
 		default:
-			ERROR_LOG("allocateResultBuffer() failed: Unknown type for the result.");
+			ERR_LOG("allocateResultBuffer() failed: Unknown type for the result.");
 		}
 	}
 	else
@@ -195,7 +195,7 @@ bool SqlResultSet::_fetch(MYSQL_STMT* stmt)
 
 	case 1: // the error
 	default:
-		ERROR_LOG(mysql_stmt_error(stmt));
+		ERR_LOG(mysql_stmt_error(stmt));
 	}
 
 	return false;

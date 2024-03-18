@@ -38,7 +38,7 @@ void TcpServer::shutdown()
 void TcpServer::on_new_connection(uv_stream_t *server, int status)
 {
 	if (status < 0) {
-		ERROR_LOG("New connection error %s\n", uv_strerror(status));
+		ERR_LOG("New connection error %s\n", uv_strerror(status));
 		return;
 	}
 
@@ -53,7 +53,7 @@ void TcpServer::on_new_connection(uv_stream_t *server, int status)
 	}
 	else {
 		uv_close((uv_handle_t*)connect->getUvTcp(), NULL);
-		ERROR_LOG("New connection close %s\n", uv_strerror(status));
+		ERR_LOG("New connection close %s\n", uv_strerror(status));
 		delete connect;
 	}
 }

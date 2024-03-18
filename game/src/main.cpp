@@ -6,9 +6,11 @@
 #include "common/EventLoop.h"
 #include "network/NetServer.h"
 #include "common/RingBuffer.hpp"
+#include "common/XLog.h"
 
 int main(int argc, char **argv)
 {
+    xLogInitLog(LogLevel::LL_INFO);
     EventLoop::Instance()->init();
     INetEvent* eve = new INetEvent();
     NetServer* netServer = new  NetServer(EventLoop::Instance(), eve);

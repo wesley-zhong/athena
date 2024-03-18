@@ -16,6 +16,7 @@ set(LIBUV ${SOLUTION_DIR}/3rd/libuv)
 set(3RD ${SOLUTION_DIR}/3rd)
 set(SOL2 ${SOLUTION_DIR}/3rd/sol2)
 set(LUA ${SOLUTION_DIR}/3rd/lua)
+set(SPDLOG ${SOLUTION_DIR}/3rd/spdlog)
 
 set(ENGINE_COMMON ${ENGINE_DIR}/common)
 set(ENGINE_DB ${ENGINE_DIR}/db)
@@ -29,27 +30,32 @@ include_directories(${LIBUV}/include
     ${3RD}
     ${3RD}/mysql
     ${3RD}/hiredis
+    ${SPDLOG}/include
     ${ENGINE_DIR}
     ${ENGINE_COMMON}
     ${ENGINE_DB}
     ${ENGINE_NETWORK}
     ${ENGINE_SERVERIAL}
     ${ENGINE_UTILS}
-    ${PROJECT_SOURCE_DIR}/src/service
+    )
+    include_directories(
+        ${PROJECT_SOURCE_DIR}/src/network
+        ${PROJECT_SOURCE_DIR}/src/objs 
     )
 
 # 获取路径下所有的.cpp/.c/.cc文件，并赋值给变量中
 aux_source_directory(${PROJECT_SOURCE_DIR}/src  CPP_FILES)
-aux_source_directory(${PROJECT_SOURCE_DIR}/src/service  CPP_SERVICES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/network  CPP_SERVICES)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/objs  OBJS)
 
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
-set (PROJECT_LINK_LIBS uv lua engine enginelua)
+set (PROJECT_LINK_LIBS uv lua spdlog engine enginelua)
 message("======== begin to configure game libsDir: ${PROJECT_SOURCE_DIR}/../libs") 
 message("======== begin to configure game libs: ${PROJECT_LINK_LIBS}")
 message("======== begin to configure game cpps:  ${CPP_FILES}")
 
 # 生成可执行文件
-add_executable(${PROJECT_NAME}  ${CPP_FILES} ${CPP_SERVICES})
+add_executable(${PROJECT_NAME}  ${CPP_FILES} ${OBJS}${CPP_SERVICES})
 
 # 链接操作
 target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS} )

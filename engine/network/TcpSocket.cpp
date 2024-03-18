@@ -111,7 +111,6 @@ int TcpSocketBase::write(const uv_buf_t *buf, uint32 size)
 
 void TcpSocketBase::alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf)
 {
-
 	TcpSocketBase *self = (TcpSocketBase *)handle->data;
 	buf->base = (char *)self->mBuffer.GetBasePointer();
 	// something wrong here
@@ -124,7 +123,7 @@ void TcpSocketBase::read(uv_stream_t *tcp, ssize_t nread, const uv_buf_t *buf)
 	{
 		/*
 		if (nread != UV_EOF)
-			ERROR_LOG("Read error %s\n", uv_err_name(nread));
+			ERR_LOG("Read error %s\n", uv_err_name(nread));
 		*/
 		uv_close((uv_handle_t *)tcp, on_uv_close);
 		return;
@@ -151,7 +150,7 @@ void TcpSocketBase::write(uv_write_t *req, int status)
 {
 	if (status)
 	{
-		ERROR_LOG("Write error %s\n", uv_strerror(status));
+		ERR_LOG("Write error %s\n", uv_strerror(status));
 	}
 	TcpSocketBase *self = (TcpSocketBase *)(req->data);
 	self->on_writecomplete();
