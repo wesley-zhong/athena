@@ -48,7 +48,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/lib)
 
 # linked libs
 link_directories(${SOLUTION_DIR}/libs)
-set(PROJECT_LINK_LIBS uv lua mysqlclient hiredis engine enginelua)
+set(PROJECT_LINK_LIBS uv lua mysqlclient pdlog hiredis engine)
 # 生成可执行文件
 add_executable(${PROJECT_NAME}  ${CPP_FILES})
 
