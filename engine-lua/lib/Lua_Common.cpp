@@ -9,8 +9,8 @@ class Lua_XLog
 {
 public:
 	static void info_log(const char * log) { INFO_LOG(log); }
-	static void warning_log(const char * log) { WARNING_LOG(log); }
-	static void error_log(const char * log) { ERROR_LOG(log); }
+	static void warning_log(const char * log) { WARN_LOG(log); }
+	static void error_log(const char * log) { ERR_LOG(log); }
 };
 
 void luabind_common(sol::state & lua)
