@@ -11,11 +11,12 @@ enum LogLevel
 	LL_ERROR,
 };
 
-void xLogInitLog(LogLevel logLevel);
+void xLogInitLog(LogLevel logLevel, const std::string &fileName);
+//extern spdlog::logger *pSpdLog;
 
-#define DEBUG_LOG(...) spdlog::log( __VA_ARGS__)
-#define INFO_LOG(...)  spdlog::info( __VA_ARGS__)
-#define WARN_LOG(...)  spdlog::warn( __VA_ARGS__)
-#define ERR_LOG(...)   spdlog::error( __VA_ARGS__)
+#define DEBUG_LOG(...) spdlog::debug(__VA_ARGS__)
+#define INFO_LOG(...) spdlog::info(__VA_ARGS__)
+#define WARN_LOG(...) spdlog::warn(__VA_ARGS__)
+#define ERR_LOG(...) spdlog::error(__VA_ARGS__)
 
 #endif

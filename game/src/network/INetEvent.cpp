@@ -17,16 +17,16 @@ void INetEvent::onAccept(NetConnect *conn)
 void INetEvent::onClose(NetConnect *conn)
 {
     GameRole *gameRole = (GameRole *)conn->getUserdata();
-    if(gameRole != nullptr){
+    if (gameRole != nullptr)
+    {
         delete gameRole;
     }
-        INFO_LOG("on closed {}", conn->remoteIP());
+    INFO_LOG("on closed {}", conn->remoteIP());
 }
 void INetEvent::onMsg(NetConnect *conn, int msgtype, NetPacket *pack)
 {
     GameRole *gameRole = (GameRole *)conn->getUserdata();
-
-        INFO_LOG("on onMsg {}  bodyLen={}",  pack->getBodyData(), pack->getBodySize() );
+    INFO_LOG("on onMsg {}  bodyLen={}", pack->getBodyData(), pack->getBodySize());
     // for(int i = 0 ; i < 100; i ++){
     NetPacket *netPacket = new NetPacket();
     netPacket->pushString("hello");

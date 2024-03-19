@@ -10,7 +10,7 @@
 
 int main(int argc, char **argv)
 {
-    xLogInitLog(LogLevel::LL_INFO);
+    xLogInitLog(LogLevel::LL_INFO,"../logs/game.log");
     EventLoop::Instance()->init();
     INetEvent* eve = new INetEvent();
     NetServer* netServer = new  NetServer(EventLoop::Instance(), eve);
