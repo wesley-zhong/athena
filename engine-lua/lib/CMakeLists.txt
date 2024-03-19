@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(enginelua VERSION 0.1.0 LANGUAGES C CXX)
 
-# 如果代码需要支持C++11，就直接加上这句
-# SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-# 如果想要生成的可执行文件拥有符号表，可以gdb调试，就直接加上这句
+
 set(CMAKE_CXX_STANDARD 17)
 add_definitions("-Wall -g")
 
@@ -17,6 +15,7 @@ set(LIBUV ${SOLUTION_DIR}/3rd/libuv)
 set(3RD ${SOLUTION_DIR}/3rd)
 set(SOL2 ${SOLUTION_DIR}/3rd/sol2)
 set(LUA ${SOLUTION_DIR}/3rd/lua)
+set(SPDLOG ${SOLUTION_DIR}/3rd/spdlog)
 
 set(ENGINE_COMMON ${ENGINE_DIR}/common)
 set(ENGINE_DB ${ENGINE_DIR}/db)
@@ -24,12 +23,14 @@ set(ENGINE_NETWORK ${ENGINE_DIR}/network)
 set(ENGINE_SERVERIAL ${ENGINE_DIR}/serialization)
 set(ENGINE_UTILS ${ENGINE_DIR}/utils)
 
+
 include_directories(${LIBUV}/include
     ${SOL2}/include
     ${LUA}
     ${3RD}
     ${3RD}/mysql
     ${3RD}/hiredis
+    ${SPDLOG}/include
     ${ENGINE_COMMON}
     ${ENGINE_DB}
     ${ENGINE_NETWORK}

@@ -12,7 +12,6 @@ enum LogLevel
 };
 
 void xLogInitLog(LogLevel logLevel, const std::string &fileName);
-//extern spdlog::logger *pSpdLog;
 
 #define DEBUG_LOG(...) spdlog::debug(__VA_ARGS__)
 #define INFO_LOG(...) spdlog::info(__VA_ARGS__)
