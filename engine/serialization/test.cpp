@@ -15,10 +15,9 @@ public:
 	{
 		printf("%d|%d|%s|%s\n", tinfo->type, tinfo->value, tinfo->name.c_str(), name);
 	}
-	// �������
 	virtual void onVariable(TypeInfo * tinfo, const char * varName, const char * exp)
 	{
-		printf("var�� %d|%d|%s|%s = %s\n", tinfo->type, tinfo->value, tinfo->name.c_str(), varName, exp);
+		printf("var %d|%d|%s|%s = %s\n", tinfo->type, tinfo->value, tinfo->name.c_str(), varName, exp);
 	}
 
 	virtual void onEnterStruct(const char * name)

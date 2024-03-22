@@ -1,6 +1,6 @@
 /************************************************************************
 * @file      Keyword.h
-* @brief     ¹Ø¼ü×ÖÁÐ±í
+* @brief     ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 * @author    jiangwang
 * @data      2019-12-26
 * @version   0.1
@@ -44,9 +44,6 @@ enum KeyEnum
 
 	eKw_VAR,
 };
-
-// ¿çÆ½Ì¨²»ÔÊÐí£º++ -- += -= *= /=
-
 
 #include <string>
 #include <map>
