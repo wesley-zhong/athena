@@ -10,6 +10,7 @@
 #include "network/Dispatcher.h"
 #include "MsgHandler.h"
 #include "GameRole.h"
+#include "ProtoInner.pb.h"
 
 int main(int argc, char **argv)
 {
@@ -40,8 +41,18 @@ int main(int argc, char **argv)
     // }
 
     // pRingBuf->push(&i4);
+ 
+     std::shared_ptr<InnerHead>pInnherHead = std::make_shared<InnerHead>();
+     pInnherHead->set_id(111);
+     std::string pServer = pInnherHead->SerializeAsString();
+     std::shared_ptr<InnerHead>pInnherHead2 = std::make_shared<InnerHead>();
+     bool ret = pInnherHead2->ParseFromString(pServer);
+     std::cout<<"------ "<<pInnherHead2->id() <<std::endl;
+     
     Dispatcher::Instance()->registerMsgHandler(100, std::function(MsgHandler::onLogin));
+    Dispatcher::Instance()->registerMsgHandler(101, std::function(MsgHandler::onSomeMsg));
     GameRole *role = new GameRole();
     role->setPid(1000);
     Dispatcher::Instance()->callFunction(100, role);
+    Dispatcher::Instance()->callFunction(101, pInnherHead2.get());
 }

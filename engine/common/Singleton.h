@@ -8,7 +8,6 @@ class Singleton
 public:
     static T *Instance()
     {
-
         return _instance;
     }
 
