@@ -7,17 +7,20 @@
 #include "network/NetServer.h"
 #include "common/RingBuffer.hpp"
 #include "common/XLog.h"
+#include "network/Dispatcher.h"
+#include "MsgHandler.h"
+#include "GameRole.h"
 
 int main(int argc, char **argv)
 {
-    xLogInitLog(LogLevel::LL_INFO,"../logs/game.log");
-    EventLoop::Instance()->init();
-    INetEvent* eve = new INetEvent();
-    NetServer* netServer = new  NetServer(EventLoop::Instance(), eve);
-    netServer->listen("127.0.0.1", 3001);
-    std::cout<<"ready start  server"<<std::endl;
+    xLogInitLog(LogLevel::LL_INFO, "../logs/game.log");
+    // EventLoop::Instance()->init();
+    // INetEvent* eve = new INetEvent();
+    // NetServer* netServer = new  NetServer(EventLoop::Instance(), eve);
+    // netServer->listen("127.0.0.1", 3001);
+    // std::cout<<"ready start  server"<<std::endl;
 
-    return EventLoop::Instance()->run();
+    // return EventLoop::Instance()->run();
 
     // RingBuffer<int *> *pRingBuf = new RingBuffer<int *>(3);
     // int i1 = 1;
@@ -37,4 +40,8 @@ int main(int argc, char **argv)
     // }
 
     // pRingBuf->push(&i4);
+    Dispatcher::Instance()->registerMsgHandler(100, std::function(MsgHandler::onLogin));
+    GameRole *role = new GameRole();
+    role->setPid(1000);
+    Dispatcher::Instance()->callFunction(100, role);
 }

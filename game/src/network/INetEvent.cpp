@@ -3,8 +3,8 @@
 #include "network/NetPacket.h"
 #include "network/NetConnect.h"
 #include "common/Dispatcher.hpp"
-#include "GameRole.hpp"
 #include "common/XLog.h"
+#include "GameRole.h"
 
 void INetEvent::onAccept(NetConnect *conn)
 {
