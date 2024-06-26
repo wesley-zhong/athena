@@ -2,8 +2,12 @@
 #include <string.h>
 #include <stdarg.h>
 #include "Define.h"
-//#include <unistd.h>
-//#include <pthread.h>
+
+#if defined  __linux__ || defined __APPLE__
+#include <unistd.h>
+#include <pthread.h>
+#endif
+
 
 
 void Tools::encrypt(char * buf, char * key)
