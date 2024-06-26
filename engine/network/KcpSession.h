@@ -54,6 +54,7 @@ private:
 
 
 #include "UTimer.h"
+#include <string_view>
 class KcpEvent;
 class KcpSession : public KcpSessionBase
 {

@@ -18,7 +18,7 @@ set(3RD ${SOLUTION_DIR}/3rd)
 set(SOL2 ${SOLUTION_DIR}/3rd/sol2)
 set(LUA ${SOLUTION_DIR}/3rd/lua)
 set(SPDLOG ${SOLUTION_DIR}/3rd/spdlog)
-set(PROTO_BUF ${SOLUTION_DIR}/3rd/google/protobuf)
+set(PROTO_BUF ${SOLUTION_DIR}/3rd/protobuf)
 
 set(ENGINE_COMMON ${ENGINE_DIR}/common)
 set(ENGINE_DB ${ENGINE_DIR}/db)
@@ -35,7 +35,7 @@ include_directories(${LIBUV}/include
     ${3RD}/mysql
     ${3RD}/hiredis
     ${SPDLOG}/include
-    ${PROTO_BUF}
+    ${PROTO_BUF}/include
     ${ENGINE_DIR}
     ${ENGINE_COMMON}
     ${ENGINE_DB}
@@ -56,18 +56,20 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/src/network  CPP_SERVICES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/objs  OBJS)
 aux_source_directory(${PROTO_GEN}  PROTO_OBJS)
 
-link_directories(${PROJECT_SOURCE_DIR}/../libs )
+link_directories(${PROJECT_SOURCE_DIR}/../libs   ${PROTO_BUF}/lib)
 set (PROJECT_LINK_LIBS uv lua spdlog  engine enginelua)
 message("======== begin to configure game libsDir: ${PROTO_OBJS}") 
 
+
 # 生成可执行文件
 add_executable(${PROJECT_NAME}  ${CPP_FILES} ${OBJS} ${PROTO_OBJS} ${CPP_SERVICES})
-find_package(PkgConfig REQUIRED)
+find_package(protobuf CONFIG REQUIRED)
+#find_package(PkgConfig REQUIRED)
 # these calls create special `PkgConfig::<MODULE>` variables
-pkg_check_modules(protobuf REQUIRED IMPORTED_TARGET protobuf)
+#pkg_check_modules(protobuf REQUIRED IMPORTED_TARGET protobuf)
 #pkg_check_modules(protobuf-lite REQUIRED IMPORTED_TARGET protobuf-lite)
 
 # 链接操作
-target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS} PkgConfig::protobuf)
+target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS} protobuf::libprotobuf)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 

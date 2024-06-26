@@ -1,11 +1,5 @@
 -- init
-package.path=package.path..';../script/?.lua'
-redis =require("redis")
-local ret=redis.connect("localhost",6379)
 
-redis.setString("a_key","avalue")
-local value = redis.getString("a_key")
-print("vvvvvvvvvv = ".. value)
 
 event_init()
 
@@ -19,7 +13,7 @@ server.on_accept = function(conn)
 end
 
 server.on_close = function(conn)
-	print("close")
+	print("close......")
 end
 
 server.on_msg = function(conn, msgtype, pack)
@@ -28,6 +22,6 @@ server.on_msg = function(conn, msgtype, pack)
 	conn:sendPacket(1, pack)
 end
 
-server:listen("127.0.0.1", 3001, false)
+server:listen("127.0.0.1", 3002, false)
 
 event_run()

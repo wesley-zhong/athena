@@ -6,6 +6,7 @@
 using namespace std;
 
 #ifdef SYSTEM_WIN
+#include<winsock.h>
 
 int gettimeofday(struct timeval *tp, void *tzp) 
 {

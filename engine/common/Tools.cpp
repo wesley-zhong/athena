@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include "Define.h"
-#include <unistd.h>
-#include <pthread.h>
+//#include <unistd.h>
+//#include <pthread.h>
 
 
 void Tools::encrypt(char * buf, char * key)
@@ -48,8 +48,9 @@ void Tools::sleep(int ms)
 
 unsigned long Tools::getCurrentThreadID()
 {
-   pthread_t  p = pthread_self();
-   return  (long) p;
+   //pthread_t  p = pthread_self();
+   //return  (long) p;
+	return 0;
 }
 
 

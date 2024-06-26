@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 	luabind_json(lua);
 	luabind_httpserver(lua);
 
-	//lua.script_file(argv[1]);
+	lua.script_file(argv[1]);
 	init_lua_pb(lua.lua_state());
 
 	if (luaL_dofile(lua.lua_state(), argv[1]) == 1) {
