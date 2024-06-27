@@ -1,5 +1,6 @@
 #include "ThreadPool.h"
 #include <thread>
+#include<memory.h>
 
 using namespace Thread;
 
