@@ -4,6 +4,7 @@ project(athena VERSION 0.1.0 LANGUAGES C CXX)
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 # 如果想要生成的可执行文件拥有符号表，可以gdb调试，就直接加上这句
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -std=c++0x")
 add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX)
 add_definitions("-Wall -g")
 
