@@ -6,7 +6,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "../common/XLog.h"
 #include "sol/sol.hpp"
 #include "pb.h"
 
@@ -33,6 +33,8 @@ void init_lua_pb(lua_State* L)
 
 int main(int argc, char* argv[])
 {
+    xLogInitLog(LogLevel::LL_INFO, "../logs/engine.log");
+
 	sol::state lua;
 	lua.open_libraries();
 

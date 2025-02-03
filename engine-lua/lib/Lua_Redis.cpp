@@ -11,7 +11,7 @@ public:
     bool conncet(const std::string &ip, int port)
     {
         redisCtx = redisConnect(ip.c_str(), 6379);
-        if (redisCtx == NULL || redisCtx->err)
+        if (redisCtx == nullptr || redisCtx->err)
         {
             if (redisCtx)
             {
@@ -36,14 +36,18 @@ public:
     {
         char **argv;
         size_t *argvlen;
-        argv = (char **)malloc(sizeof(*argv) * (2));
-        argvlen = (size_t *)malloc(sizeof(*argvlen) * (2));
+        argv = (char **)malloc(sizeof(*argv) * (3));
+        argvlen = (size_t *)malloc(sizeof(*argvlen) * (3));
         argv[0] = (char *)"SET";
         argvlen[0] = sizeof("SET") - 1;
         argv[1] = (char *)key.c_str();
         argvlen[1] = key.length();
 
-        redisReply *reply = (redisReply *)redisCommandArgv(redisCtx, 2, (const char**)argv, (const size_t*)argvlen);
+        argv[2] = (char *)value.c_str();
+        argvlen[2] = value.length();
+
+
+        redisReply *reply = (redisReply *)redisCommandArgv(redisCtx, 3, (const char**)argv, (const size_t*)argvlen);
         if (reply == NULL)
         {
             ERR_LOG("Error:  Couldn't execute redisCommandArgv");

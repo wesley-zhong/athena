@@ -5,8 +5,9 @@ package.path=package.path..';./script/?.lua'
 redis =require("redis")
 local ret=redis.connect("localhost",6379)
 
-redis.setString("a_key","avalue")
-local value = redis.getString("a_key")
+redis.setString("a_key2_3","rrrrrrravalue3335555")
+
+local value = redis.getString("a_key2_3")
 print("vvvvvvvvvv = ".. value)
 
 
