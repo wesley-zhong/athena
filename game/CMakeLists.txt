@@ -18,7 +18,7 @@ set(3RD ${SOLUTION_DIR}/3rd)
 set(SOL2 ${SOLUTION_DIR}/3rd/sol2)
 set(LUA ${SOLUTION_DIR}/3rd/lua)
 set(SPDLOG ${SOLUTION_DIR}/3rd/spdlog)
-set(PROTO_BUF ${SOLUTION_DIR}/3rd/protobuf)
+#set(PROTO_BUF ${SOLUTION_DIR}/3rd/protobuf)
 
 set(ENGINE_COMMON ${ENGINE_DIR}/common)
 set(ENGINE_DB ${ENGINE_DIR}/db)
@@ -35,7 +35,6 @@ include_directories(${LIBUV}/include
     ${3RD}/mysql
     ${3RD}/hiredis
     ${SPDLOG}/include
-    ${PROTO_BUF}/include
     ${ENGINE_DIR}
     ${ENGINE_COMMON}
     ${ENGINE_DB}
@@ -56,8 +55,9 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/src/network  CPP_SERVICES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/objs  OBJS)
 aux_source_directory(${PROTO_GEN}  PROTO_OBJS)
 
-link_directories(${PROJECT_SOURCE_DIR}/../libs   ${PROTO_BUF}/lib)
-set (PROJECT_LINK_LIBS uv lua spdlog  engine enginelua)
+link_directories(${PROJECT_SOURCE_DIR}/../libs)
+
+set (PROJECT_LINK_LIBS   enginelua)
 message("======== begin to configure game libsDir: ${PROTO_OBJS}") 
 
 

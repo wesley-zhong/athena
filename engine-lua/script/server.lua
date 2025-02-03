@@ -13,7 +13,7 @@ server.on_accept = function(conn)
 end
 
 server.on_close = function(conn)
-	print("close......")
+	print("closed......")
 end
 
 server.on_msg = function(conn, msgtype, pack)
