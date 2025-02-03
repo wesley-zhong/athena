@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.5.0)
-project(athena VERSION 0.1.0 LANGUAGES C CXX)
+project(athena VERSION 0.1.0)
+# 设置 C++ 标准
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 # 如果代码需要支持C++11，就直接加上这句
 if(UNIX)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
