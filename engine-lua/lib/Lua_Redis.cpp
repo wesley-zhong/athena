@@ -5,6 +5,62 @@
 #include "RedisResult.h"
 #include "DBThreadPool.h"
 #include "RedisCommand.h"
+class Lua_Redis
+{
+public:
+    bool conncet(const std::string &ip, int port)
+    {
+        redisCtx = redisConnect(ip.c_str(), 6379);
+        if (redisCtx == NULL || redisCtx->err)
+        {
+            if (redisCtx)
+            {
+                ERR_LOG("Error: {} ", redisCtx->errstr);
+                return false;
+            }
+
+            ERR_LOG("Can't allocate redis context");
+            return false;
+        }
+        return true;
+    }
+    std::string getString(const std::string& key) const
+    {
+        redisReply *reply = (redisReply *)redisCommand(redisCtx, ("GET " + key).c_str());
+        INFO_LOG("GET key ={}: {}", key, reply->str);
+        std::string ret = std::string(reply->str, reply->len);
+        freeReplyObject(reply);
+        return ret;
+    }
+    void setString(const std::string &key, const std::string &value)
+    {
+        char **argv;
+        size_t *argvlen;
+        argv = (char **)malloc(sizeof(*argv) * (2));
+        argvlen = (size_t *)malloc(sizeof(*argvlen) * (2));
+        argv[0] = (char *)"SET";
+        argvlen[0] = sizeof("SET") - 1;
+        argv[1] = (char *)key.c_str();
+        argvlen[1] = key.length();
+
+        redisReply *reply = (redisReply *)redisCommandArgv(redisCtx, 2, (const char**)argv, (const size_t*)argvlen);
+        if (reply == NULL)
+        {
+            ERR_LOG("Error:  Couldn't execute redisCommandArgv");
+            return ;
+        }
+
+        if (reply->type == REDIS_REPLY_INTEGER)
+        {
+            INFO_LOG("%s reply: %lld\n", argv[0], reply->integer);
+        }
+
+        INFO_LOG("SET key = {}: {}", key, value);
+        freeReplyObject(reply);
+    }
+private:
+    redisContext *redisCtx;
+};
 
 
 class Lua_RedisResult
@@ -92,6 +148,11 @@ private:
 
 void luabind_redis(sol::state & lua)
 {
+    lua.new_usertype<Lua_Redis>("Redis",
+                                    "connect", &Lua_Redis::conncet,
+                                    "setString", &Lua_Redis::setString,
+                                    "getString", &Lua_Redis::getString);
+
 	lua.new_usertype<Lua_RedisCommand>("RedisCommand",
 		sol::constructors<Lua_RedisCommand(const char *)>(),
 		"pushInt8", &Lua_RedisCommand::pushInt8,

@@ -1,6 +1,15 @@
 -- init
 
 
+package.path=package.path..';./script/?.lua'
+redis =require("redis")
+local ret=redis.connect("localhost",6379)
+
+redis.setString("a_key","avalue")
+local value = redis.getString("a_key")
+print("vvvvvvvvvv = ".. value)
+
+
 event_init()
 
 -- create server
