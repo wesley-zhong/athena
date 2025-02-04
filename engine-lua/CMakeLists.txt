@@ -53,5 +53,5 @@ add_executable(${PROJECT_NAME}  ${CPP_FILES})
 
 
 # 链接操作
-target_link_libraries(${PROJECT_NAME} ${PROJECT_LINK_LIBS} pthread)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_LINK_LIBS} pthread dl)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)

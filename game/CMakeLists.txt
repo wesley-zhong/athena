@@ -70,6 +70,6 @@ find_package(protobuf CONFIG REQUIRED)
 #pkg_check_modules(protobuf-lite REQUIRED IMPORTED_TARGET protobuf-lite)
 
 # 链接操作
-target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS} pthread protobuf::libprotobuf)
+target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS} pthread dl protobuf::libprotobuf)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
