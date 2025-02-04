@@ -45,7 +45,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/lib)
 # linked libs
 link_directories(${SOLUTION_DIR}/libs)
 message("======== begin to configure engine-lua lib dir  : ${SOLUTION_DIR}/libs")
-set(PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua pthread)
+set(PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua )
 
 message("======== begin to configure engine-lua libs: ${PROJECT_LINK_LIBS}")
 # 生成可执行文件
@@ -53,5 +53,5 @@ add_executable(${PROJECT_NAME}  ${CPP_FILES})
 
 
 # 链接操作
-target_link_libraries(${PROJECT_NAME} ${PROJECT_LINK_LIBS})
+target_link_libraries(${PROJECT_NAME} ${PROJECT_LINK_LIBS} pthread)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)

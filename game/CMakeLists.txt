@@ -57,7 +57,7 @@ aux_source_directory(${PROTO_GEN}  PROTO_OBJS)
 
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
 
-set (PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua pthread)
+set (PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua)
 message("======== begin to configure game libsDir: ${PROTO_OBJS}") 
 
 
@@ -70,6 +70,6 @@ find_package(protobuf CONFIG REQUIRED)
 #pkg_check_modules(protobuf-lite REQUIRED IMPORTED_TARGET protobuf-lite)
 
 # 链接操作
-target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS} protobuf::libprotobuf)
+target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS} pthread protobuf::libprotobuf)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
