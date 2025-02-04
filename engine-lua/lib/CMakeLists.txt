@@ -23,6 +23,8 @@ set(ENGINE_NETWORK ${ENGINE_DIR}/network)
 set(ENGINE_SERVERIAL ${ENGINE_DIR}/serialization)
 set(ENGINE_UTILS ${ENGINE_DIR}/utils)
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SOLUTION_DIR}/libs)
+
 
 include_directories(${LIBUV}/include
     ${SOL2}/include

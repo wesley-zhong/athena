@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -std=c++0x")
 add_definitions("-Wall -g")
 
+
 # 设置变量
 set (SOLUTION_DIR  ${PROJECT_SOURCE_DIR}/..)
 set(LIBUV ${SOLUTION_DIR}/3rd/libuv)
@@ -21,6 +22,8 @@ set(ENGINE_DB ${ENGINE_DIR}/db)
 set(ENGINE_NETWORK ${ENGINE_DIR}/network)
 set(ENGINE_SERVERIAL ${ENGINE_DIR}/serialization)
 set(ENGINE_UTILS ${ENGINE_DIR}/utils)
+message("PPPPPPPPPPPPP: ${SOLUTION_DIR}/libs")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${SOLUTION_DIR}/libs)
 
 
 include_directories(${LIBUV}/include
