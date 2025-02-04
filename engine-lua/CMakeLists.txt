@@ -45,7 +45,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/lib)
 # linked libs
 link_directories(${SOLUTION_DIR}/libs)
 message("======== begin to configure engine-lua lib dir  : ${SOLUTION_DIR}/libs")
-set(PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua)
+set(PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua pthread)
 
 message("======== begin to configure engine-lua libs: ${PROJECT_LINK_LIBS}")
 # 生成可执行文件

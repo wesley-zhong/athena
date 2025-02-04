@@ -57,7 +57,7 @@ aux_source_directory(${PROTO_GEN}  PROTO_OBJS)
 
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
 
-set (PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua)
+set (PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua pthread)
 message("======== begin to configure game libsDir: ${PROTO_OBJS}") 
 
 
