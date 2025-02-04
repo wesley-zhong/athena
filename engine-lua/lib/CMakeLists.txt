@@ -38,12 +38,12 @@ include_directories(${LIBUV}/include
     ${ENGINE_UTILS}
     )
 
-message("======== begin to configureeeeee  :${ENGINE_DIR}  ${ENGINE_NETWORK}")
+#message("======== begin to configureeeeee  :${ENGINE_DIR}  ${ENGINE_NETWORK}")
 # 获取路径下所有的.cpp/.c/.cc文件，并赋值给变量中
 aux_source_directory(${PROJECT_SOURCE_DIR}  CPP_FILES)
 
 
-message("======== begin to configure game libs: ${PROJECT_LINK_LIBS}")
+#message("======== begin to configure game libs: ${PROJECT_LINK_LIBS}")
 #message("======== begin to configure game cpps:  ${COMMON_CPP_FILES}")
 
 

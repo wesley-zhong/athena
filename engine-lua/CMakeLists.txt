@@ -41,9 +41,13 @@ include_directories(${LIBUV}/include
 aux_source_directory(${PROJECT_SOURCE_DIR}/  CPP_FILES)
 add_subdirectory(${PROJECT_SOURCE_DIR}/lib)
 
+
 # linked libs
 link_directories(${SOLUTION_DIR}/libs)
+message("======== begin to configure engine-lua lib dir  : ${SOLUTION_DIR}/libs")
 set(PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  enginelua)
+
+message("======== begin to configure engine-lua libs: ${PROJECT_LINK_LIBS}")
 # 生成可执行文件
 add_executable(${PROJECT_NAME}  ${CPP_FILES})
 
