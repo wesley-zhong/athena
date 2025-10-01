@@ -6,17 +6,20 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -std=c++17")
 add_definitions("-Wall -g")
 
+
 # 检查编译器类型
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # 只在 GCC 中添加这个警告选项
-    target_compile_options(your_target PRIVATE
+    target_compile_options(${PROJECT_NAME} PRIVATE
             -Wmaybe-uninitialized
     )
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused-function)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     # Clang 使用不同的选项
-    target_compile_options(your_target PRIVATE
+    target_compile_options(${PROJECT_NAME} PRIVATE
             -Wuninitialized
     )
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused-function)
 endif()
 
 

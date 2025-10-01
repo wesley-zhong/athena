@@ -35,7 +35,7 @@ const IUINT32 IKCP_ASK_TELL = 2;		// need to send IKCP_CMD_WINS
 const IUINT32 IKCP_WND_SND = 32;
 const IUINT32 IKCP_WND_RCV = 128;       // must >= max fragment size
 const IUINT32 IKCP_MTU_DEF = 1400;
-const IUINT32 IKCP_ACK_FAST	= 3;
+//const IUINT32 IKCP_ACK_FAST	= 3;
 const IUINT32 IKCP_INTERVAL	= 100;
 const IUINT32 IKCP_OVERHEAD = 24;
 const IUINT32 IKCP_DEADLINK = 20;
@@ -185,12 +185,29 @@ static void ikcp_segment_delete(ikcpcb *kcp, IKCPSEG *seg)
 void ikcp_log(ikcpcb *kcp, int mask, const char *fmt, ...)
 {
 	char buffer[1024];
-	va_list argptr;
-	if ((mask & kcp->logmask) == 0 || kcp->writelog == 0) return;
-	va_start(argptr, fmt);
-	vsprintf(buffer, fmt, argptr);
-	va_end(argptr);
-	kcp->writelog(buffer, kcp, kcp->user);
+    va_list argptr;
+
+    // 1. 检查日志掩码和日志写入函数
+    // 如果掩码不匹配或没有设置写入函数，则直接返回
+    if ((mask & kcp->logmask) == 0 || kcp->writelog == 0) {
+        return;
+    }
+
+    // 2. 初始化可变参数列表
+    va_start(argptr, fmt);
+
+    // 3. 使用 vsnprintf 安全地格式化字符串
+    // vsnprintf 保证不会写入超过 LOG_BUFFER_SIZE - 1 个字符（留出空间给空终止符 '\0'）
+    vsnprintf(buffer, 1024, fmt, argptr);
+
+    // 4. 清理可变参数列表
+    va_end(argptr);
+
+    // 5. 调用日志写入函数
+    // 即使 len >= LOG_BUFFER_SIZE 导致字符串被截断，buffer 仍然是空终止的。
+    // 如果您的 writelog 只需要一个空终止的字符串，此调用是安全的。
+    // 注意：如果 kcp->writelog 的签名需要长度参数，则可能需要调整此部分。
+    kcp->writelog(buffer, kcp, kcp->user);;
 }
 
 // check log mask

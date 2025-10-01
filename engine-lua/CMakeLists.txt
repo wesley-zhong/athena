@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0)
-project(engine-lua VERSION 0.1.0 LANGUAGES C CXX)
+project(engine-lua-app VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -std=c++17")
@@ -47,7 +47,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/lib)
 # linked libs
 link_directories(${SOLUTION_DIR}/libs)
 message("======== begin to configure engine-lua lib dir  : ${SOLUTION_DIR}/libs")
-set(PROJECT_LINK_LIBS   mysqlclient  hiredis  enginelua )
+set(PROJECT_LINK_LIBS   mysqlclient  hiredis  engine-lua )
 
 message("======== begin to configure engine-lua libs: ${PROJECT_LINK_LIBS}")
 # 生成可执行文件

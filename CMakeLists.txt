@@ -14,6 +14,7 @@ endif()
 
 add_compile_definitions(WIN32_LEAN_AND_MEAN NOMINMAX)
 add_definitions("-Wall -g")
+add_compile_options(-Wno-unused-function)
 
 
 #set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
