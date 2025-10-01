@@ -27,17 +27,25 @@ void Tools::encrypt(char * buf, char * key)
 
 std::string Tools::format(const char * format, ...)
 {
-	va_list vl;
-	va_start(vl, format);
+    va_list vl;
+    va_start(vl, format);
 
-	int len = vsnprintf(NULL, 0, format, vl);
-	std::string s("", len + 1);
-	char * buff = (char *)s.data();
-	vsprintf(buff, format, vl);
+    // Determine required length
+    int len = vsnprintf(nullptr, 0, format, vl);
+    va_end(vl);
 
-	va_end(vl);
+    if (len < 0) {
+        return "";
+    }
 
-	return s;
+    // Allocate buffer and format
+    auto buffer = std::make_unique<char[]>(len + 1);
+
+    va_start(vl, format);
+    vsnprintf(buffer.get(), len + 1, format, vl);
+    va_end(vl);
+
+    return std::string(buffer.get());
 }
 
 

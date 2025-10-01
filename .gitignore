@@ -1,0 +1,10 @@
+/build
+/cmake-build-debug
+/.idea
+/engine-lua/cmake-build-debug
+/engine/cmake-build-debug
+/game/cmake-build-debug
+/logs
+game/.DS_Store
+libs/libengine.a
+libs/libenginelua.a
