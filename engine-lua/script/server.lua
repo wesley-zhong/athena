@@ -32,6 +32,6 @@ server.on_msg = function(conn, msgtype, pack)
 	conn:sendPacket(1, pack)
 end
 
-server:listen("127.0.0.1", 3002, false)
+server:listen("0.0.0.0", 3002, false)
 
 event_run()

@@ -25,6 +25,7 @@ int TcpServer::listen(const char * ip, int port, bool ipv6)
 	}
 
 	uv_tcp_bind(&m_uv_tcp, (const struct sockaddr*)&iaddr, 0);
+    INFO_LOG("---- bind ip: {} port :{}", ip, port);
 	return uv_listen((uv_stream_t*)&m_uv_tcp, DEFAULT_BACKLOG, on_new_connection);
 }
 
@@ -52,7 +53,7 @@ void TcpServer::on_new_connection(uv_stream_t *server, int status)
 		connect->on_read_start();
 	}
 	else {
-		uv_close((uv_handle_t*)connect->getUvTcp(), NULL);
+		uv_close((uv_handle_t*)connect->getUvTcp(), nullptr);
 		ERR_LOG("New connection close %s\n", uv_strerror(status));
 		delete connect;
 	}

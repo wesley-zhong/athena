@@ -64,25 +64,18 @@ public:
 
 	void setUserdata(void* userdata) { _userdata = userdata; }
 	void* getUserdata() { return _userdata; }
-//	void setUsernum(uint32 num) { _userdata = (void*)num; }
-void setUsernum(uint32 num){
-	userNum = num;
-}
-	//uint32 getUsernum() { return (uint32)_userdata; }
-		uint32 getUsernum(){
-			return userNum;
-		}
+    void setUsernum(uint32 num){userNum = num;}
+    uint32 getUsernum(){return userNum;}
 protected:
 
 	void write(BasePacket * packet);
-	
+
 	BasePacket* createPacket();
 	virtual void recyclePacket(BasePacket * packet);
 	virtual void on_writecomplete();
 private:
 	bool isSending();
 	void send_top_msg();
-private:
 	std::vector<uv_buf_t> mSending;
 	std::list<BasePacket*> mSendPackets;
 

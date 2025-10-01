@@ -1,12 +1,24 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(game VERSION 0.1.0 LANGUAGES C CXX)
-#SET(CMAKE_CXX_FLAGS "-g -Wall -Werror -std=c++11")
-#SET(CMAKE_CXX_FLAGS "-g -Wall -std=c++11")
-set(CMAKE_CXX_STANDARD 17)
-# 如果想要生成的可执行文件拥有符号表，可以gdb调试，就直接加上这句
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -std=c++17")
 add_definitions("-Wall -g")
 
+# 检查编译器类型
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    # 只在 GCC 中添加这个警告选项
+    target_compile_options(${PROJECT_NAME} PRIVATE
+            -Wmaybe-uninitialized
+    )
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused-function)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # Clang 使用不同的选项
+    target_compile_options(${PROJECT_NAME} PRIVATE
+            -Wuninitialized
+    )
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wno-unused-function)
+endif()
 
 # 设置变量
 set (SOLUTION_DIR  ${PROJECT_SOURCE_DIR}/..)
@@ -57,7 +69,7 @@ aux_source_directory(${PROTO_GEN}  PROTO_OBJS)
 
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
 
-set (PROJECT_LINK_LIBS  uv lua mysqlclient  hiredis  engine-lua)
+set (PROJECT_LINK_LIBS  mysqlclient  hiredis  engine-lua)
 message("======== begin to configure game libsDir: ${PROTO_OBJS}") 
 
 
