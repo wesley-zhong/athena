@@ -60,7 +60,7 @@ void NetConnect::on_msgbuffer(MessageBuffer * buffer)
 			//new packet
 			if (mReadPacket->wpos() == mReadPacket->getMarkLen() + MSG_HEAD_SIZE)
 			{
-				_netevent->onMsg(this, mReadPacket->getMsgType(), mReadPacket);
+				_netevent->onMsg(this, mReadPacket->getMsgId(), mReadPacket);
 
 				// recycle packet
 				recyclePacket(mReadPacket);
@@ -76,19 +76,19 @@ void NetConnect::on_clsesocket()
 }
 
 
-void NetConnect::sendMsg(uint32 msgtype, NetPacket * pack)
+void NetConnect::sendMsg(uint32 msgId, NetPacket * pack)
 {
 	NetPacket * packet = createPacket();
 	packet->moveData(pack);
-	packet->writeHead(msgtype);
+	packet->writeHead(msgId);
 	TcpSocket::write(packet);
 }
 
-void NetConnect::sendMsg(uint32 msgtype, const char* msg, uint32 len)
+void NetConnect::sendMsg(uint32 msgId, const char* msg, uint32 len)
 {
 	NetPacket *pack = createPacket();
 	pack->append(msg, len);
-	pack->writeHead(msgtype);
+	pack->writeHead(msgId);
 	TcpSocket::write(pack);
 }
 

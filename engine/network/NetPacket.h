@@ -4,7 +4,7 @@
 #include "BasePacket.h"
 
 #define MSG_LEN_POS  0
-#define MSG_TYPE_POS sizeof(uint32)
+#define MSG_ID_POS sizeof(uint32)
 #define MSG_HEAD_SIZE (sizeof(uint32) + sizeof(uint32))
 
 // packet head( msglen:uint32, msgtype:uint32 )
@@ -19,7 +19,7 @@ public:
 
 	// read msg call
 	virtual int32  getMarkLen();   // message head mark length
-	virtual int getMsgType();
+	virtual int getMsgId();
 	virtual bool isHeadFull();
 
 	// send msg call

@@ -22,9 +22,9 @@ int32  NetPacket::getMarkLen()
 	return getValue<uint32>(MSG_LEN_POS);
 }
 
-int NetPacket::getMsgType()
+int NetPacket::getMsgId()
 {
-	return getValue<uint32>(MSG_TYPE_POS);
+	return getValue<uint32>(MSG_ID_POS);
 }
 
 bool NetPacket::isHeadFull()
@@ -45,7 +45,7 @@ char * NetPacket::sendStream()
 void NetPacket::writeHead(int msgtype)
 {
 	setValue<uint32>(MSG_LEN_POS, getBodySize());
-	setValue<uint32>(MSG_TYPE_POS, msgtype);
+	setValue<uint32>(MSG_ID_POS, msgtype);
 }
 
 uint32 NetPacket::readHead(const uint8 * p, uint32 size)

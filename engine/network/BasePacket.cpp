@@ -93,7 +93,7 @@ int32  BasePacket::getMarkLen()
 	return 0;
 }
 
-int BasePacket::getMsgType()
+int BasePacket::getMsgId()
 {
 	return 0;
 }

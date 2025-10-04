@@ -10,6 +10,8 @@ extern "C" {
 #include "sol/sol.hpp"
 #include "pb.h"
 
+#include <map>
+
 extern void luabind_netserver(sol::state & lua);
 extern void luabind_kcpserver(sol::state & lua);
 extern void luabind_websocket(sol::state & lua);
@@ -33,7 +35,7 @@ void init_lua_pb(lua_State* L)
 
 int main(int argc, char* argv[])
 {
-    xLogInitLog(LogLevel::LL_INFO, "../logs/engine.log");
+    xLogInitLog(LogLevel::LL_INFO, "../logs/engine_lua_app.log");
 
 	sol::state lua;
 	lua.open_libraries();
@@ -60,6 +62,21 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	system("pause");
-	return 0;
+//	system("pause");
+
+
+// for tetst
+
+//std::vector<int>  intarray;
+//
+//std::map<char, int> charMap;
+// for (int i = 0; i < 26; ++i){
+//    // charMap['a' +i]=i;
+//    charMap.insert({'a'+i, i});
+// }
+// auto it = charMap.begin();
+// while(it != charMap.end()){
+//     std::cout << it->first ;
+//     ++it;
+// }
 }

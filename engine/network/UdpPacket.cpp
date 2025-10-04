@@ -31,7 +31,7 @@ void UdpPacket::initSize(int s)
 	}
 }
 
-int UdpPacket::getMsgType()
+int UdpPacket::getMsgId()
 {
 	return getValue<uint32>(0);
 }

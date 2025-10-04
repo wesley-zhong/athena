@@ -91,7 +91,7 @@ int KcpSessionBase::__udpSend(const char * buf, int len)
 
 void KcpSessionBase::flushKcp()
 {
-	// Ã¿´Î·¢ËÍÍêµ÷ÓÃflush£¬°ÑÊý¾ÝË¢³öÈ¥£¬·ñÔòÒªÏÂ´Îupdate²Å³öµÄÈ¥
+	// Ã¿ï¿½Î·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½flushï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½ï¿½È¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Â´ï¿½updateï¿½Å³ï¿½ï¿½ï¿½È¥
 	if (__m_kcp) ikcp_flush(__m_kcp);
 }
 
@@ -102,7 +102,7 @@ const ikcpcb* KcpSessionBase::getKcp()
 
 void KcpSessionBase::setStream()
 {
-	// ÉèÖÃ³ÉÁ÷Ä£Ê½ºó£¬ÉÏ²ãÂß¼­ÐèÒª´¦ÀíÏûÏ¢°üµÄ±ß½ç
+	// ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½Ï²ï¿½ï¿½ß¼ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Ä±ß½ï¿½
 	if (__m_kcp) __m_kcp->stream = 1;
 }
 
@@ -173,7 +173,7 @@ void KcpSession::_onMsg(UdpPacket * packet)
 {
 	__m_nTalkTime = XTime::iclock();
 	if (__m_kcpEvent)
-		__m_kcpEvent->onMsg(this, packet->getMsgType(), packet);
+		__m_kcpEvent->onMsg(this, packet->getMsgId(), packet);
 }
 
 void KcpSession::sendMsg(uint32 msgtype, UdpPacket * pack)
