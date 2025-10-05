@@ -13,7 +13,7 @@ HttpServer::HttpServer(EventLoop * loop):
 
 TcpSocket * HttpServer::createSocket()
 {
-	HttpConnect * conn = CommPool::create<HttpConnect>();
+	HttpConnect * conn = ObjPool::create<HttpConnect>();
 	conn->setEvent(this);
 	return conn;
 }
@@ -25,7 +25,7 @@ void HttpServer::onSocket(TcpSocket * connect)
 
 void HttpServer::onClose(HttpConnect *conn)
 {
-	CommPool::reclaim(conn);
+	ObjPool::release(conn);
 }
 
 void HttpServer::onGet(HttpConnect* conn, std::string_view& path, std::string_view& data)

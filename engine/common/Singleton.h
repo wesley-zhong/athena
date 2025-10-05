@@ -13,7 +13,7 @@ public:
 
 protected:
     static T* _instance;
-    // Disable compiler generated code to prevent default constuction/destruction
+    // Disable compiler generated code to prevent default construction/destruction
     // and copy/assignment semantics.
     Singleton() {}
     ~Singleton() {}

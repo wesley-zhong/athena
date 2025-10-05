@@ -6,7 +6,7 @@
 
 void init_buffer_pool(int count)
 {
-	CommPool::init<CBuffer>(count);
+	ObjPool::init<CBuffer>(count);
 }
 
 void luabind_basepacket(sol::state & lua)

@@ -10,6 +10,7 @@ extern "C" {
 #include "sol/sol.hpp"
 #include "pb.h"
 
+#include "CommonPool.h"
 #include <map>
 
 extern void luabind_netserver(sol::state & lua);
@@ -64,19 +65,31 @@ int main(int argc, char* argv[])
 
 //	system("pause");
 
-
-// for tetst
-
-//std::vector<int>  intarray;
+//ObjPool::init<std::string>(10);
+//ObjPool::init<int>(6);
+//    {
+//        auto at =  ObjPool::acquire<std::string>();
+//        at->append("ooo");
+//        INFO_LOG("string SIZE ={}", ObjPool::size<std::string>());
+//        INFO_LOG("int  SIZE ={}", ObjPool::size<int>());
+//    }
+//    INFO_LOG(" string SIZE ={}", ObjPool::size<std::string>());
 //
-//std::map<char, int> charMap;
-// for (int i = 0; i < 26; ++i){
-//    // charMap['a' +i]=i;
-//    charMap.insert({'a'+i, i});
-// }
-// auto it = charMap.begin();
-// while(it != charMap.end()){
-//     std::cout << it->first ;
-//     ++it;
-// }
+//    {
+//        auto at =  ObjPool::create<std::string>();
+//        at->append("ooo");
+//        INFO_LOG("string SIZE ={}", ObjPool::size<std::string>());
+//        ObjPool::release(at);
+//        INFO_LOG("int  SIZE ={}", ObjPool::size<int>());
+//    }
+//
+//    INFO_LOG(" SIZE ={}", ObjPool::size<std::string>());
+//// for tetst
+//
+//  void * buff = new char [1024];
+//
+//  std::string*  pstr = new (buff) std::string("hello");
+//  INFO_LOG("hha ={}", pstr->c_str());
+
+
 }

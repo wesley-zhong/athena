@@ -52,12 +52,12 @@ ByteBuffer& ByteBuffer::operator=(ByteBuffer&& right)
 }
 
 ByteBuffer::~ByteBuffer() {
-	if(_storage) CommPool::reclaim(_storage);
+
 }
 
 CBuffer* ByteBuffer::createBuffer()
 {
-	return CommPool::create<CBuffer>();
+	return ObjPool::create<CBuffer>();
 }
 void ByteBuffer::swapBuffer(ByteBuffer& right)
 {

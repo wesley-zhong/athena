@@ -2,94 +2,70 @@
 #define _OBJECT_POOL_H
 
 #include <functional>
-#include <list>
+#include <stack>
 #include "XAssert.h"
+#include "XLog.h"
 
 template< typename T>
 class ObjectPool
 {
-	typedef std::list<T*> OBJECTS;
-
 public:
-	ObjectPool(int32 maxfreecount = 0x200) :
-		max_free(maxfreecount), obj_count_(0)
-	{
-		
-	}
+    using Ptr = std::unique_ptr<T, std::function<void(T*)>>;
+    ObjectPool(int maxCount, size_t initSize = 10):maxCount(maxCount),borrowedCount(0) {
+        for (size_t i = 0; i < initSize; ++i) {
+            freeObjects.push(new T());
+        }
+    }
 
-	~ObjectPool(){
-		destroy();
-	}
+    ~ObjectPool() {
+        while (!freeObjects.empty()) {
+            delete freeObjects.top();
+            freeObjects.pop();
+        }
+    }
 
-	void init(int32 count)
-	{
-		max_free = count;
-	}
+    // 从池子获取对象
+    Ptr acquire() {
+        if(!freeObjects.empty()){
+            T* obj = freeObjects.top();
+            freeObjects.pop();
+            borrowedCount++;
+            return Ptr(obj, [this](T* obj) { this->release(obj);});
+        }
+        if(borrowedCount < maxCount){
+            borrowedCount++;
+            return Ptr(new T(), [this](T* obj) { this->release(obj);});
+        }
+        ERR_LOG("no enough  space");
+    }
 
-	void destroy()
-	{
-		typename OBJECTS::iterator iter = objects_.begin();
-		for (; iter != objects_.end(); ++iter)
-		{
-			(*iter)->setEnabledPoolObject(false);
-			delete (*iter);
-		}
+    // note: this should be release manually
+    T*  create(){
+        if(!freeObjects.empty()){
+            T* obj = freeObjects.top();
+            freeObjects.pop();
+            borrowedCount++;
+            return obj;
+        }
+        if(borrowedCount < maxCount){
+            borrowedCount++;
+            return new T();
+        }
+        ERR_LOG("no enough  space");
+    }
+    // 回收对象放回池子
+    void release(T* obj) {
+        borrowedCount--;
+        freeObjects.push(obj);
+    }
+    size_t  size(){
+        return maxCount - borrowedCount;
+    }
 
-		objects_.clear();
-		obj_count_ = 0;
-	}
-
-	T* createObject()
-	{
-		if (obj_count_ > 0)
-		{
-			T* t = *objects_.begin();
-			objects_.pop_front();
-			--obj_count_;
-			t->setEnabledPoolObject(true);
-			return t;
-		}
-		
-		T* t = newObj();
-		t->setEnabledPoolObject(true);
-		return t;
-	}
-
-	virtual T * newObj()
-	{
-		return new T;
-	}
-
-	void reclaimObject(T* obj)
-	{
-		if (obj == NULL)
-		{
-			return;
-		}
-		if (!obj->isEnabledPoolObject())
-		{
-			XAssert(0, "The object is already in the pool");
-			return;
-		}
-
-		obj->setEnabledPoolObject(false);
-		if (obj_count_ >= max_free)
-		{
-			delete obj;
-		}
-		else
-		{
-			objects_.push_back(obj);
-			++obj_count_;
-		}
-	}
-
-	int32 getObjCount(){ return obj_count_; }
-	OBJECTS & getObjs() { return objects_; }
 private:
-	int32 max_free;
-	int32 obj_count_;
-	OBJECTS objects_;
+    std::stack<T*> freeObjects;
+    int maxCount;
+    int borrowedCount;
 };
 
 
