@@ -1585,7 +1585,7 @@ static void lpb_encode(lpb_Env *e, const pb_Type *t) {
             const pb_Field *f =
                 pb_fname(t, lpb_name(e->LS, lpb_toslice(L, -2)));
             if (f == NULL)
-                /* skip */;
+                /* read_skip */;
             else if (f->type && f->type->is_map)
                 lpbE_map(e, f);
             else if (f->repeated)

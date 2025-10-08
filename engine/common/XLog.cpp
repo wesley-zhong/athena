@@ -8,7 +8,8 @@ void xLogInitLog(LogLevel logLevel, const std::string &logFileName)
 {
 	auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 	console_sink->set_level(spdlog::level::debug);
-	console_sink->set_pattern("[multi_sink_example] [%^%l%$] %v");
+	//console_sink->set_pattern("[multi_sink_example] [%^%l%$] %v");
+    console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%s:%#] %v");
 
 	spdlog::init_thread_pool(8192, 1);
     auto stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt >();
@@ -37,7 +38,7 @@ void xLogInitLog(LogLevel logLevel, const std::string &logFileName)
 	default:
 		break;
 	}
-	spdlog::set_pattern("[%H:%M:%S %z] [%^%L%$] [thread %t] %v");
+	spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [thread %t] [%s:%#] %v");
 	spdlog::flush_every(std::chrono::seconds(3));
 	// spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
 }

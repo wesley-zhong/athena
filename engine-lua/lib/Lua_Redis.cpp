@@ -88,7 +88,6 @@ public:
 	float getFloat() { return getValue<float>(); }
 	double getDouble() { return getValue<double>(); }
 	std::string getString() { return getValue<std::string>(); }
-	int readBlob(BasePacket * packet) { return m_result->readBlob(packet); }
 	std::string_view getData() { return m_result->getStream(); }
 
 	bool fetch() {
@@ -186,7 +185,6 @@ void luabind_redis(sol::state & lua)
 		"getFloat", &Lua_RedisResult::getFloat,
 		"getDouble", &Lua_RedisResult::getDouble,
 		"getString", &Lua_RedisResult::getString,
-		"readBlob", &Lua_RedisResult::readBlob,
 		"getData", &Lua_RedisResult::getData,
 		"fetch", &Lua_RedisResult::fetch);
 }

@@ -1,7 +1,6 @@
 #include "mysql.h"
 #include "SqlResultSet.h"
 #include "XLog.h"
-#include "BasePacket.h"
 
 static void allocateResultBuffer(MYSQL_BIND* bind, MYSQL_FIELD* field)
 {
@@ -299,14 +298,6 @@ std::string SqlResultSet::getString()
 
 	std::string val(field->data(), field->length());
 	return val;
-}
-int SqlResultSet::readBlob(BasePacket* packet)
-{
-	SqlField* field = getField(m_currColIdx++);
-	if (!field) return 0;
-
-	packet->append(field->data(), field->length());
-	return field->length();
 }
 
 std::string_view SqlResultSet::getStrview() // lua call

@@ -1,31 +1,36 @@
 #include <chrono>
 #include "sol/sol.hpp"
 #include <iostream>
-#include "network/TcpServer.h"
-#include "INetEvent.h"
-#include "common/EventLoop.h"
-#include "network/NetServer.h"
+
 #include "common/RingBuffer.hpp"
 #include "common/XLog.h"
 #include "network/Dispatcher.h"
+#include "network/AthenaTcpServer.h"
 #include "MsgHandler.h"
 #include "GameRole.h"
 #include "ProtoInner.pb.h"
+#include "hv/TcpServer.h"
 #ifdef WIN32
 #pragma comment(lib,"ws2_32.lib")
 #endif // WINDIWS
 
-
+using namespace hv;
 int main(int argc, char **argv)
 {
     xLogInitLog(LogLevel::LL_INFO, "../logs/game.log");
-     EventLoop::Instance()->init();
-     INetEvent* eve = new INetEvent();
-     NetServer* netServer = new  NetServer(EventLoop::Instance(), eve);
-     netServer->listen("127.0.0.1", 3001);
-     INFO_LOG("ready start  server :3001");
+    AthenaTcpServer athenaTcpServer;
+    athenaTcpServer.start(30001);
+//     EventLoop::Instance()->init();
+//     INetEvent* eve = new INetEvent();
+//     NetServer* netServer = new  NetServer(EventLoop::Instance(), eve);
+//     netServer->listen("127.0.0.1", 3001);
+//     INFO_LOG("ready start  server :3001");
+//
+//     return EventLoop::Instance()->run();
 
-     return EventLoop::Instance()->run();
+
+
+
 
 //     RingBuffer<int *> *pRingBuf = new RingBuffer<int *>(3);
 //     int i1 = 1;
@@ -62,4 +67,8 @@ int main(int argc, char **argv)
 //    role->setPid(1000);
 //    Dispatcher::Instance()->callFunction(100, role);
 //    Dispatcher::Instance()->callFunction(101, pInnherHead2.get());
+
+
+
+    return 0;
 }

@@ -25,7 +25,6 @@ endif()
 
 # 设置变量
 set (SOLUTION_DIR  ${PROJECT_SOURCE_DIR}/..)
-set(LIBUV ${SOLUTION_DIR}/3rd/libuv)
 set(3RD ${SOLUTION_DIR}/3rd)
 set(SOL2 ${SOLUTION_DIR}/3rd/sol2)
 set(LUA ${SOLUTION_DIR}/3rd/lua)
@@ -42,7 +41,7 @@ message("PPPPPPPPPPPPP: ${SOLUTION_DIR}/libs")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${SOLUTION_DIR}/libs)
 
 
-include_directories(${LIBUV}/include
+include_directories(
     ${SOL2}/include
     ${LUA}
     ${3RD}
@@ -71,11 +70,13 @@ add_library(${PROJECT_NAME} STATIC
     ${SCRIPT_CPP_FILES}
     ${SERIAL_CPP_FILES}
     ${UTILS_CPP_FILES}
+        network/AthenaTcpServer.cpp
+        network/AthenaTcpServer.h
 )
 
 # linked libs
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
-set(PROJECT_LINK_LIBS uv lua spdlog)
+set(PROJECT_LINK_LIBS  hv lua spdlog )
 
 # 链接操作
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LINK_LIBS})

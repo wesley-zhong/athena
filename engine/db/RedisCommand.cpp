@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include "RedisCommand.h"
-#include "BasePacket.h"
+
 
 RedisCommand::RedisCommand(const char *cmd)
 {
@@ -51,10 +51,6 @@ void RedisCommand::pushDouble(double value)
 void RedisCommand::pushString(std::string value)
 {
 	append((const uint8*)value.c_str(), value.size());
-}
-void RedisCommand::pushBlob(BasePacket * packet)
-{
-	append((const uint8*)packet->contents(), packet->writePos());
 }
 
 void RedisCommand::pushData(std::string_view sv)

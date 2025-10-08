@@ -1,5 +1,4 @@
 #include "sol/sol.hpp"
-#include "UTimer.h"
 #include "XLog.h"
 #include "Tools.h"
 #include "XFile.h"
@@ -27,10 +26,10 @@ void luabind_common(sol::state & lua)
 	lua["warningLog"] = &Lua_XLog::warning_log;
 	lua["errorLog"] = &Lua_XLog::error_log;
 
-	// timer
-	lua.new_usertype<UTimer>("UTimer",
-		"start", &UTimer::start,
-		"stop", &UTimer::stop);
+//	// timer
+//	lua.new_usertype<UTimer>("UTimer",
+//		"start", &UTimer::start,
+//		"stop", &UTimer::stop);
 
 	// tool
 	lua["sleep"] = &Tools::sleep;

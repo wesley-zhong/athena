@@ -1,16 +1,8 @@
 #pragma once
-/************************************************************************
-* @file      RedisResult.h
-* @brief     redis result
-* @author    jiangwang
-* @data      2020-3-31
-* @version   0.1
-************************************************************************/
 
 #include "XLog.h"
 #include "BaseType.h"
 #include "DBResult.h"
-#include "BasePacket.h"
 #include "hiredis.h"
 #include <string>
 
@@ -51,7 +43,7 @@ public:
 
 	// string type
 	RedisResult &operator>>(std::string& value);
-	int readBlob(BasePacket * packet);
+
 	std::string_view getStream();
 private:
 	redisReply * m_reply;

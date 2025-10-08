@@ -5,7 +5,6 @@
 #include "SqlPrepare.h"
 #include "Tools.h"
 #include "XLog.h"
-#include "BasePacket.h"
 #include <assert.h>
 #include "SqlResultSet.h"
 #include <memory.h>
@@ -139,10 +138,6 @@ void SqlPrepare::pushString(std::string value)
 	memcpy(pBind->buffer, value.data(), len);
 }
 
-void SqlPrepare::pushBlob(BasePacket * packet)
-{
-	write(packet->contents(), packet->writePos());
-}
 
 void SqlPrepare::pushData(std::string_view sv)
 {

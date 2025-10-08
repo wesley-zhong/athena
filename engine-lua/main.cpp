@@ -38,30 +38,33 @@ int main(int argc, char* argv[])
 {
     xLogInitLog(LogLevel::LL_INFO, "../logs/engine_lua_app.log");
 
-	sol::state lua;
-	lua.open_libraries();
+//	sol::state lua;
+//	lua.open_libraries();
+//
+//	// bind c++ && lua
+//	luabind_netserver(lua);
+//	luabind_kcpserver(lua);
+//	luabind_websocket(lua);
+//	luabind_eventloop(lua);
+//	luabind_mysql(lua);
+//	luabind_redis(lua);
+//	luabind_basepacket(lua);
+//	luabind_common(lua);
+//	luabind_csvpar(lua);
+//	luabind_json(lua);
+//	luabind_httpserver(lua);
+//
+//	lua.script_file(argv[1]);
+//	init_lua_pb(lua.lua_state());
 
-	// bind c++ && lua
-	luabind_netserver(lua);
-	luabind_kcpserver(lua);
-	luabind_websocket(lua);
-	luabind_eventloop(lua);
-	luabind_mysql(lua);
-	luabind_redis(lua);
-	luabind_basepacket(lua);
-	luabind_common(lua);
-	luabind_csvpar(lua);
-	luabind_json(lua);
-	luabind_httpserver(lua);
+//	if (luaL_dofile(lua.lua_state(), argv[1]) == 1) {
+//		if (lua_isstring(lua.lua_state(), -1)) {
+//			printf("load lua file error:%s\n", lua_tostring(lua.lua_state(), -1));
+//		}
+//	}
 
-	lua.script_file(argv[1]);
-	init_lua_pb(lua.lua_state());
-
-	if (luaL_dofile(lua.lua_state(), argv[1]) == 1) {
-		if (lua_isstring(lua.lua_state(), -1)) {
-			printf("load lua file error:%s\n", lua_tostring(lua.lua_state(), -1));
-		}
-	}
+    auto p = std::make_shared<int>(1);
+    INFO_LOG("HAHA ={}",*p);
 
 //	system("pause");
 

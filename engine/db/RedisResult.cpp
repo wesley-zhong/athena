@@ -1,6 +1,5 @@
 #include "RedisResult.h"
 #include "hiredis.h"
-#include "BasePacket.h"
 #include <sstream>
 
 RedisResult::RedisResult()
@@ -90,16 +89,7 @@ RedisResult &RedisResult::operator>>(std::string& value)
 	return *this;
 }
 
-int RedisResult::readBlob(BasePacket * packet)
-{
-	int len;
-	const char * pdata = getData(len);
-	if (len > 0)
-	{
-		packet->append((const uint8 *)pdata, len);
-	}
-	return len;
-}
+
 
 std::string_view RedisResult::getStream()
 {

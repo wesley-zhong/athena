@@ -13,9 +13,9 @@ enum LogLevel
 
 void xLogInitLog(LogLevel logLevel, const std::string &fileName);
 
-#define DEBUG_LOG(...) spdlog::debug(__VA_ARGS__)
-#define INFO_LOG(...) spdlog::info(__VA_ARGS__)
-#define WARN_LOG(...) spdlog::warn(__VA_ARGS__)
-#define ERR_LOG(...) spdlog::error(__VA_ARGS__)
+#define DEBUG_LOG(...) SPDLOG_DEBUG(__VA_ARGS__)
+#define INFO_LOG(...)  SPDLOG_INFO (__VA_ARGS__)
+#define WARN_LOG(...) SPDLOG_WARN(__VA_ARGS__)
+#define ERR_LOG(...) SPDLOG_ERROR(__VA_ARGS__)
 
 #endif

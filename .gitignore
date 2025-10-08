@@ -8,3 +8,4 @@
 game/.DS_Store
 libs/libengine.a
 libs/libenginelua.a
+/engine-lua/lib/cmake-build-debug
