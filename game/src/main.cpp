@@ -10,26 +10,12 @@
 #include "GameRole.h"
 #include "ProtoInner.pb.h"
 #include "hv/TcpServer.h"
-#ifdef WIN32
-#pragma comment(lib,"ws2_32.lib")
-#endif // WINDIWS
-
 using namespace hv;
 int main(int argc, char **argv)
 {
     xLogInitLog(LogLevel::LL_INFO, "../logs/game.log");
-    AthenaTcpServer athenaTcpServer;
-    athenaTcpServer.start(30001);
-//     EventLoop::Instance()->init();
-//     INetEvent* eve = new INetEvent();
-//     NetServer* netServer = new  NetServer(EventLoop::Instance(), eve);
-//     netServer->listen("127.0.0.1", 3001);
-//     INFO_LOG("ready start  server :3001");
-//
-//     return EventLoop::Instance()->run();
-
-
-
+//    AthenaTcpServer athenaTcpServer;
+//    athenaTcpServer.start(30001);
 
 
 //     RingBuffer<int *> *pRingBuf = new RingBuffer<int *>(3);
@@ -53,20 +39,23 @@ int main(int argc, char **argv)
 //
 //    // pRingBuf->push(&i4);
 //
-//     std::shared_ptr<InnerHead>pInnherHead = std::make_shared<InnerHead>();
-//     pInnherHead->set_id(111);
-//     std::string pServer = pInnherHead->SerializeAsString();
-//     std::shared_ptr<InnerHead>pInnherHead2 = std::make_shared<InnerHead>();
-//     bool ret = pInnherHead2->ParseFromString(pServer);
-//    // std::cout<<"------ "<<pInnherHead2->id() <<std::endl;
-//     INFO_LOG("------", pInnherHead2->id());
+     std::shared_ptr<InnerHead>pInnherHead = std::make_shared<InnerHead>();
+     pInnherHead->set_id(121);
+     std::string pServer = pInnherHead->SerializeAsString();
+     std::shared_ptr<InnerHead>pInnherHead2 = std::make_shared<InnerHead>();
+     bool ret = pInnherHead2->ParseFromString(pServer);
+    // std::cout<<"------ "<<pInnherHead2->id() <<std::endl;
+     INFO_LOG("------", pInnherHead2->id());
 //
-//    Dispatcher::Instance()->registerMsgHandler(100, std::function(MsgHandler::onLogin));
+    //Dispatcher::Instance()->registerMsgHandler(100, std::function(MsgHandler::onLogin));
+    REGISTER_MSG_ID_FUN(100, MsgHandler::onSomeMsg);
+    Dispatcher::Instance()->processMsg(100,888888, pServer.c_str(), pServer.length());
+
 //    Dispatcher::Instance()->registerMsgHandler(101, std::function(MsgHandler::onSomeMsg));
 //    GameRole *role = new GameRole();
 //    role->setPid(1000);
-//    Dispatcher::Instance()->callFunction(100, role);
-//    Dispatcher::Instance()->callFunction(101, pInnherHead2.get());
+   // Dispatcher::Instance()->callFunction(100, 10000000001,role);
+  //  Dispatcher::Instance()->callFunction(101, pInnherHead2.get());
 
 
 

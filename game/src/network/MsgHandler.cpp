@@ -4,10 +4,10 @@
 #include "ProtoInner.pb.h"
 
 
-void MsgHandler::onLogin(int playerId, GameRole* gameRole){
+void MsgHandler::onLogin(int64_t playerId, GameRole* gameRole){
     INFO_LOG("HELLO playdiId ={} roleId = {}",playerId, gameRole->getPid());
 }
 
-void MsgHandler::onSomeMsg(int playerId, InnerHead* InnerHead ){
+void MsgHandler::onSomeMsg(int64_t playerId, InnerHead* InnerHead ){
     INFO_LOG("HELLO playdiId ={} innherHeaderId = {}",playerId, InnerHead->id());
 }
