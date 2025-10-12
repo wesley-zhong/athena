@@ -12,8 +12,8 @@
 Dispatcher::Instance()->registerMsgHandler(100, std::function(FUNCTION))
 
 struct MsgFunction {
-    google::protobuf::Message *param;
     std::function<void(int64_t, void *)> function;
+    std::function<void* ()>newParam;    //this may be use obj pool
 };
 
 class Dispatcher : public Singleton<Dispatcher> {
@@ -29,8 +29,6 @@ public:
 //  template <typename T>
 //  void  registerMsgHandlers(int msgId, std::function<void(int, std::shared_ptr<T>)> msgFuc);
 
-    void callFunction(MsgFunction *msgFunction, int64_t pid, void *param_);
-
     void processMsg(int msgId, int64_t playerId, const void *body, int len);
     // template <typename T>
     // void callFunction(int msgId, std::shared_ptr<T> param_);
@@ -42,11 +40,13 @@ private:
 
 template<typename T>
 void Dispatcher::registerMsgHandler(int msgId, std::function<void(int64_t, T*)> msgFuc) {
-    MsgFunction *msgFunction = new MsgFunction();
+    auto *msgFunction = new MsgFunction();
     msgFunction->function = [msgFuc](int64_t p1, void *p2) {
         msgFuc(p1, (T *) p2);
     };
-    msgFunction->param = new T();
+    msgFunction->newParam =[](){
+        return new T();
+    };
     msgMap[msgId] = msgFunction;
 }
 // template <typename T>
@@ -59,28 +59,15 @@ void Dispatcher::registerMsgHandler(int msgId, std::function<void(int64_t, T*)> 
 // }
 
 
-void Dispatcher::callFunction(MsgFunction *msgFunction, int64_t playerId, void* param_) {
-    msgFunction->function(playerId, (void *) param_);
-}
-
-// template <typename T>
-// void Dispatcher::callFunction(int msgId, std::shared_ptr<T> param_)
-// {
-//   auto func = msgSMap[msgId];
-//   if (func != nullptr)
-//   {
-//     func(msgId, (std::shared_ptr<void>)param_);
-//   }
-// }
-
 void Dispatcher::processMsg(int msgId, int64_t playerId, const void *body, int len) {
     auto func = msgMap[msgId];
     if (func == nullptr) {
         INFO_LOG("msg id ={} not found", msgId);
         return;
     }
-    func->param->ParseFromArray(body, len);
-    callFunction(func,playerId, func->param);
+    auto * param = ( google::protobuf::Message * )func->newParam();
+    param->ParseFromArray(body, len);
+    func->function(playerId, param);
 }
 
 #endif

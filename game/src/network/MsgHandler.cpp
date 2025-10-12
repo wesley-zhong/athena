@@ -5,9 +5,9 @@
 
 
 void MsgHandler::onLogin(int64_t playerId, GameRole* gameRole){
-    INFO_LOG("HELLO playdiId ={} roleId = {}",playerId, gameRole->getPid());
+    INFO_LOG("HELLO playerId ={} roleId = {}",playerId, gameRole->getPid());
 }
 
 void MsgHandler::onSomeMsg(int64_t playerId, InnerHead* InnerHead ){
-    INFO_LOG("HELLO playdiId ={} innherHeaderId = {}",playerId, InnerHead->id());
+    INFO_LOG("HELLO playerId ={} innherHeaderId = {}",playerId, InnerHead->id());
 }

@@ -40,18 +40,18 @@ int main(int argc, char **argv)
 //    // pRingBuf->push(&i4);
 //
      std::shared_ptr<InnerHead>pInnherHead = std::make_shared<InnerHead>();
-     pInnherHead->set_id(121);
+     pInnherHead->set_id(14441);
      std::string pServer = pInnherHead->SerializeAsString();
      std::shared_ptr<InnerHead>pInnherHead2 = std::make_shared<InnerHead>();
      bool ret = pInnherHead2->ParseFromString(pServer);
     // std::cout<<"------ "<<pInnherHead2->id() <<std::endl;
-     INFO_LOG("------", pInnherHead2->id());
+     INFO_LOG("------{}", pInnherHead2->id());
 //
     //Dispatcher::Instance()->registerMsgHandler(100, std::function(MsgHandler::onLogin));
     REGISTER_MSG_ID_FUN(100, MsgHandler::onSomeMsg);
-    Dispatcher::Instance()->processMsg(100,888888, pServer.c_str(), pServer.length());
+    Dispatcher::Instance()->processMsg(100,8889, pServer.c_str(), pServer.length());
 
-//    Dispatcher::Instance()->registerMsgHandler(101, std::function(MsgHandler::onSomeMsg));
+   // Dispatcher::Instance()->registerMsgHandler<InnerHead>(101, std::function(MsgHandler::onSomeMsg));
 //    GameRole *role = new GameRole();
 //    role->setPid(1000);
    // Dispatcher::Instance()->callFunction(100, 10000000001,role);
