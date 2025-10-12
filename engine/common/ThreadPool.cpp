@@ -23,7 +23,7 @@ void CThread::thread_func(CThread *t) {
     t->onStart();
     while (t->_isrun) {
         TaskPtr task = t->popWaitTask();
-        if (task == nullptr) {
+        if (task != nullptr) {
             t->run(task);
             continue;
         }

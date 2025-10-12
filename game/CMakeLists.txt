@@ -36,6 +36,7 @@ include_directories(
 include_directories(
         ${PROJECT_SOURCE_DIR}/src/network
         ${PROJECT_SOURCE_DIR}/src/objs
+        ${PROJECT_SOURCE_DIR}/src/thread
         ${PROTO_GEN}
 )
 # 设置项目间的依赖关系
@@ -45,6 +46,7 @@ add_dependencies(engine engine-lua)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src  CPP_FILES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/network  CPP_SERVICES)
 aux_source_directory(${PROJECT_SOURCE_DIR}/src/objs  OBJS)
+aux_source_directory(${PROJECT_SOURCE_DIR}/src/thread  CPP_THREAD)
 aux_source_directory(${PROTO_GEN}  PROTO_OBJS)
 
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
@@ -58,7 +60,7 @@ message("======== begin to configure game libs: ${PROJECT_LINK_LIBS}")
 
 
 # 生成可执行文件
-add_executable(${PROJECT_NAME}  ${CPP_FILES} ${OBJS} ${PROTO_OBJS} ${CPP_SERVICES})
+add_executable(${PROJECT_NAME}  ${CPP_FILES} ${OBJS} ${PROTO_OBJS} ${CPP_SERVICES} ${CPP_THREAD})
 
 # 链接操作
 target_link_libraries(${PROJECT_NAME}  ${PROJECT_LINK_LIBS})
