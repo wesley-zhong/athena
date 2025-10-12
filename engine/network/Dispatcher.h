@@ -13,15 +13,15 @@ Dispatcher::Instance()->registerMsgHandler(100, std::function(FUNCTION))
 
 struct MsgFunction {
     std::function<void(int64_t, void *)> function;
-    std::function<void* ()>newParam;    //this may be use obj pool
+    std::function<void *()> newParam;    //this may be use obj pool
 };
 
 class Dispatcher : public Singleton<Dispatcher> {
 
 public:
-    Dispatcher() {};
+    Dispatcher() = default;
 
-    ~Dispatcher() {};
+    ~Dispatcher() = default;
 
     template<typename T>
     void registerMsgHandler(int msgId, std::function<void(int64_t, T *)> msgFuc);
@@ -39,12 +39,12 @@ private:
 };
 
 template<typename T>
-void Dispatcher::registerMsgHandler(int msgId, std::function<void(int64_t, T*)> msgFuc) {
+void Dispatcher::registerMsgHandler(int msgId, std::function<void(int64_t, T *)> msgFuc) {
     auto *msgFunction = new MsgFunction();
     msgFunction->function = [msgFuc](int64_t p1, void *p2) {
         msgFuc(p1, (T *) p2);
     };
-    msgFunction->newParam =[](){
+    msgFunction->newParam = []() {
         return new T();
     };
     msgMap[msgId] = msgFunction;
@@ -65,7 +65,7 @@ void Dispatcher::processMsg(int msgId, int64_t playerId, const void *body, int l
         INFO_LOG("msg id ={} not found", msgId);
         return;
     }
-    auto * param = ( google::protobuf::Message * )func->newParam();
+    auto *param = (google::protobuf::Message *) func->newParam();
     param->ParseFromArray(body, len);
     func->function(playerId, param);
 }
