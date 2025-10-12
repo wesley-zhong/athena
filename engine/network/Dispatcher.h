@@ -9,7 +9,7 @@
 
 
 #define REGISTER_MSG_ID_FUN(MSGID, FUNCTION) \
-Dispatcher::Instance()->registerMsgHandler(100, std::function(FUNCTION))
+Dispatcher::Instance()->registerMsgHandler(MSGID, std::function(FUNCTION))
 
 struct MsgFunction {
     std::function<void(int64_t, void *)> function;
