@@ -75,7 +75,7 @@ private:
 class DBThread : public CThread
 {
 public:
-	DBThread(ThreadPool * pool);
+	DBThread();
 	~DBThread();
 	virtual void onStart();
 	virtual void onEnd();

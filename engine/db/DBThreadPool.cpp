@@ -96,10 +96,9 @@ void DBRedisTask::complete()
 
 //------------------------------------------------
 
-DBThread::DBThread(ThreadPool * pool):
-	CThread(pool)
+DBThread::DBThread()
 {
-	m_db = NULL;
+	m_db = nullptr;
 }
 
 DBThread::~DBThread()
@@ -109,10 +108,12 @@ DBThread::~DBThread()
 
 void DBThread::onStart()
 {
-	DBThreadPool * pool = static_cast<DBThreadPool*>(_pool);
+	//DBThreadPool * pool =  n;//static_cast<DBThreadPool*>(_pool);
 
-	const DBConfig * config = pool->getConfig();
-	if (config->device == "mysql")
+	//const DBConfig * config = pool->getConfig();
+    // Todo  only for just now
+    const DBConfig * config = new DBConfig();
+    if (config->device == "mysql")
 	{
 		m_db = new DBInterfaceMysql(config->ip.c_str(), config->dbname.c_str(), config->user.c_str(), config->pswd.c_str(), config->port);
 	}
@@ -150,7 +151,7 @@ DBThreadPool::~DBThreadPool()
 
 CThread* DBThreadPool::createThread()
 {
-	return new DBThread(this);
+	return new DBThread();
 }
 
 void DBThreadPool::deleteThread(CThread * t)
