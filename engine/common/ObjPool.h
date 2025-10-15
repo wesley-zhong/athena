@@ -8,11 +8,8 @@
 #include <stack>
 #include <memory>
 #include <mutex>
-#include <optional>
 #include <utility>
-#include <iostream>
 #include <atomic>
-#include <thread>
 #include <chrono>
 #include "XLog.h"
 
@@ -43,59 +40,11 @@ private:
     bool _debug = false;
 
 public:
-    // RAII handle
-    class PoolObjPtr {
-    public:
-        PoolObjPtr() noexcept : _obj(nullptr), _pool(nullptr) {
-        }
+    class PoolObjPtr;
 
-        PoolObjPtr(T *obj, ObjPool *pool) noexcept : _obj(obj), _pool(pool) {
-        }
-
-        PoolObjPtr(const PoolObjPtr &) = delete;
-
-        PoolObjPtr &operator=(const PoolObjPtr &) = delete;
-
-        PoolObjPtr(PoolObjPtr &&o) noexcept : _obj(o._obj), _pool(o._pool) {
-            o._obj = nullptr;
-            o._pool = nullptr;
-        }
-
-        PoolObjPtr &operator=(PoolObjPtr &&o) noexcept {
-            if (this != &o) {
-                release();
-                _obj = o._obj;
-                _pool = o._pool;
-                o._obj = nullptr;
-                o._pool = nullptr;
-            }
-            return *this;
-        }
-
-        ~PoolObjPtr() { release(); }
-
-        T *operator->() const noexcept { return _obj; }
-        T &operator*() const noexcept { return *_obj; }
-        T *get() const noexcept { return _obj; }
-        explicit operator bool() const noexcept { return _obj != nullptr; }
-
-        void release() noexcept {
-            if (_obj && _pool) {
-                _pool->release(_obj);
-                _obj = nullptr;
-                _pool = nullptr;
-            }
-        }
-
-    private:
-        T *_obj;
-        ObjPool *_pool;
-    };
-
-public:
     explicit ObjPool(size_t initial = 0, size_t maxSize = 0)
         : _maxSize(maxSize) {
-        reserve(initial);
+        //reserve(initial);
     }
 
     ~ObjPool() {
@@ -157,10 +106,40 @@ public:
         return PoolObjPtr(obj, this);
     }
 
-    void release(T *obj) noexcept {
+    template<typename... Args>
+    std::shared_ptr<T> acquirePtr(Args &&... args) {
+        Node *n = popNodeFromHead();
+        if (n) {
+            _freeCount.fetch_sub(1, std::memory_order_relaxed);
+            _hitCount.fetch_add(1, std::memory_order_relaxed);
+            T *obj = n->obj;
+            obj->~T();
+            new(obj) T(std::forward<Args>(args)...);
+            if (_debug) {
+                //  INFO_LOG("[Pool] Hit, reuse obj {} ", *obj);
+            }
+            return std::shared_ptr<T>(obj);
+        }
+        _missCount.fetch_add(1, std::memory_order_relaxed);
+        auto up = std::make_unique<T>(std::forward<Args>(args)...);
+        T *obj = up.get();
+        {
+            std::lock_guard<std::mutex> lk(_allocMutex);
+            _ownedObjects.push_back(std::move(up));
+        }
+        _allocCountObj.fetch_add(1, std::memory_order_relaxed);
+        if (_debug) {
+            // INFO_LOG("[Pool] Miss, new obj {} ", *obj);
+        }
+        return std::shared_ptr<T>(obj);
+    }
+
+    void release(T *obj, bool callDestructure = true) noexcept {
         if (!obj) return;
-        obj->~T();
-        new(obj) T();
+        if (callDestructure) {
+            obj->~T();
+        }
+      //  new(obj) T();
 
         size_t freeNow = _freeCount.load(std::memory_order_relaxed);
         if (_maxSize > 0 && freeNow >= _maxSize) {
@@ -245,6 +224,56 @@ private:
         }
         return nullptr;
     }
+};
+
+// RAII handle
+template<typename T>
+class ObjPool<T>::PoolObjPtr {
+public:
+    PoolObjPtr() noexcept : _obj(nullptr), _pool(nullptr) {
+    }
+
+    PoolObjPtr(T *obj, ObjPool *pool) noexcept : _obj(obj), _pool(pool) {
+    }
+
+    PoolObjPtr(const PoolObjPtr &) = delete;
+
+    PoolObjPtr &operator=(const PoolObjPtr &) = delete;
+
+    PoolObjPtr(PoolObjPtr &&o) noexcept : _obj(o._obj), _pool(o._pool) {
+        o._obj = nullptr;
+        o._pool = nullptr;
+    }
+
+    PoolObjPtr &operator=(PoolObjPtr &&o) noexcept {
+        if (this != &o) {
+            release();
+            _obj = o._obj;
+            _pool = o._pool;
+            o._obj = nullptr;
+            o._pool = nullptr;
+        }
+        return *this;
+    }
+
+    ~PoolObjPtr() { release(); }
+
+    T *operator->() const noexcept { return _obj; }
+    T &operator*() const noexcept { return *_obj; }
+    T *get() const noexcept { return _obj; }
+    explicit operator bool() const noexcept { return _obj != nullptr; }
+
+    void release() noexcept {
+        if (_obj && _pool) {
+            _pool->release(_obj);
+            _obj = nullptr;
+            _pool = nullptr;
+        }
+    }
+
+private:
+    T *_obj;
+    ObjPool *_pool;
 };
 
 

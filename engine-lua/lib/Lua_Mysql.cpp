@@ -113,8 +113,8 @@ void luabind_mysql(sol::state & lua)
 	lua.new_usertype<DBThreadPool>("DBThreadPool",
 		sol::constructors<DBThreadPool(DBConfig)>(),
 		"create", &DBThreadPool::create,
-		"exit", &DBThreadPool::exit,
-		"update", &DBThreadPool::update);
+		"exit", &DBThreadPool::exit
+		 );
 
 	lua.new_usertype<Lua_SqlCommand>("SqlCommand",
 		sol::constructors<DBThreadPool(const char *)>(),

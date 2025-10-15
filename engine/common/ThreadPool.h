@@ -1,12 +1,10 @@
 #pragma once
 
-#include <functional>
 #include <vector>
 #include <thread>
 #include "TQueue.h"
+#include "ObjPool.h"
 #include "XLog.h"
-
-using RunFunction = void(*)();
 
 namespace Thread {
     class ITask {
@@ -14,8 +12,6 @@ namespace Thread {
         virtual ~ITask();
 
         virtual void run() = 0;
-
-        virtual void complete() = 0;
     };
 
     template<typename F>
@@ -23,19 +19,28 @@ namespace Thread {
     public:
         explicit TaskImpl(F &&f) : func_(std::forward<F>(f)) {
         }
+
         explicit TaskImpl(F &f) : func_(std::forward<F>(f)) {
         }
 
 
         void run() override { func_(); }
 
-        void complete() override {
+        ~TaskImpl() override {
+            _pool->release(this, false);
         }
-        ~TaskImpl() {}
+
+        static std::shared_ptr<ITask> create(F &&f) {
+            return _pool->acquirePtr(std::forward<F>(f));
+        }
 
     private:
         F func_;
+        static ObjPool<TaskImpl<F> > *_pool;
     };
+
+    template<typename F>
+    ObjPool<TaskImpl<F> > *TaskImpl<F>::_pool = new ObjPool<TaskImpl<F> >();
 
     typedef std::shared_ptr<ITask> TaskPtr;
 
@@ -80,26 +85,27 @@ namespace Thread {
 
         void exit();
 
-        void executeTask(TaskPtr task, int threadHashCode = 0);
+        void executeTask(TaskPtr task, int threadHashCode = 0) const;
 
         template<typename F>
         void execute(F &&run, int threadHashCode = 0) {
             int threadIndex = threadHashCode % (int) _threads.size();
-            auto funcTask = std::make_shared<TaskImpl<F> >(run);
-            _threads[threadIndex]->execute(funcTask);
+            //   auto funcTask = std::make_shared<TaskImpl<F> >(run);
+            auto it = TaskImpl<F>::create(std::forward<F>(run));
+            _threads[threadIndex]->execute(it);
         }
-
-        void update();
 
     protected:
         virtual Worker *createThread() = 0;
 
-        virtual void deleteThread(Worker *t) = 0;
-
-        virtual void completeTask(TaskPtr task) = 0;
+        virtual void deleteThread(Worker *t) {
+            auto it = std::find(_threads.begin(), _threads.end(), t);
+            if (it != _threads.end()) {
+                _threads.erase(it);
+            }
+        }
 
     private:
         std::vector<Worker *> _threads;
-        TQueue<TaskPtr> _completeTasks;
     };
 }

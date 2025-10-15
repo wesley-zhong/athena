@@ -92,9 +92,6 @@ public:
 	DBThreadPool(DBConfig config);
 	~DBThreadPool();
 	virtual Worker* createThread();
-	virtual void deleteThread(Worker * t);
-	virtual void completeTask(TaskPtr task);
-
 	const DBConfig * getConfig();
 
 private:

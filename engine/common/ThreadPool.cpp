@@ -6,16 +6,13 @@
 using namespace Thread;
 
 ITask::~ITask() {
-
 }
 
-Worker::Worker() :
-        _thread(Worker::thread_func, this) {
+Worker::Worker() : _thread(Worker::thread_func, this) {
     _thread.detach();
 }
 
 Worker::~Worker() {
-
 }
 
 void Worker::thread_func(Worker *t) {
@@ -44,6 +41,7 @@ void Worker::run(TaskPtr task) {
 void Worker::execute(TaskPtr task) {
     _waitTasks.push(task);
 }
+
 TaskPtr Worker::popWaitTask() {
     TaskPtr task;
     if (!_waitTasks.tryPop(task))
@@ -75,16 +73,7 @@ void ThreadPool::exit() {
     _threads.clear();
 }
 
-void ThreadPool::executeTask(TaskPtr task, int threadHashCode) {
-    int threadIndex = threadHashCode % (int)_threads.size();
+void ThreadPool::executeTask(TaskPtr task, int threadHashCode) const {
+    int threadIndex = threadHashCode % (int) _threads.size();
     _threads[threadIndex]->run(std::move(task));
-}
-
-void ThreadPool::update() {
-    TaskPtr task;
-    if (!_completeTasks.tryPop(task))
-        return;
-
-    task->complete();
-    completeTask(task);
 }

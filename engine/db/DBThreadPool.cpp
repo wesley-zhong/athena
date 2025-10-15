@@ -154,14 +154,7 @@ Worker* DBThreadPool::createThread()
 	return new DBThread();
 }
 
-void DBThreadPool::deleteThread(Worker * t)
-{
-	delete t;
-}
 
-void DBThreadPool::completeTask(TaskPtr task)
-{
-}
 
 const DBConfig * DBThreadPool::getConfig()
 {
