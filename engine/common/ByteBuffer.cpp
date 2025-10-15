@@ -1,6 +1,6 @@
 #include <cstring>
 #include "ByteBuffer.h"
-#include "CommonPool.h"
+
 
 // constructor
 ByteBuffer::ByteBuffer() : _rpos(0), _wpos(0)
@@ -57,7 +57,8 @@ ByteBuffer::~ByteBuffer() {
 
 CBuffer* ByteBuffer::createBuffer()
 {
-	return ObjPool::create<CBuffer>();
+	//return ObjPool::create<CBuffer>();
+	return  nullptr;
 }
 void ByteBuffer::swapBuffer(ByteBuffer& right)
 {

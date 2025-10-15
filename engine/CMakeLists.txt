@@ -47,15 +47,13 @@ add_library(${PROJECT_NAME} STATIC
         ${SCRIPT_CPP_FILES}
         ${SERIAL_CPP_FILES}
         ${UTILS_CPP_FILES}
-        network/AthenaTcpServer.cpp
-        network/AthenaTcpServer.h
 )
 
 # linked libs
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
 set(PROJECT_LINK_LIBS  hv lua spdlog )
 if(WIN32)
-    set(PROJECT_LINK_LIBS hv lua54 engine)
+    set(PROJECT_LINK_LIBS hv lua54 )
 endif()
 
 # 链接操作

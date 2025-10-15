@@ -142,7 +142,7 @@ public:
 				backfunc(errno_, err, &_result);
 			}
 		};
-		pool->addTask(dbTask);
+		pool->executeTask(dbTask);
 	}
 
 private:

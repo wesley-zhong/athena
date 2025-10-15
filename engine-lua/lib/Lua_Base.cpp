@@ -1,10 +1,10 @@
 #include "sol/sol.hpp"
 #include "ByteBuffer.h"
-#include "CommonPool.h"
+
 
 void init_buffer_pool(int count)
 {
-	ObjPool::init<CBuffer>(count);
+	//ObjPool::init<CBuffer>(count);
 }
 
 void luabind_basepacket(sol::state & lua)

@@ -5,20 +5,20 @@
 
 using namespace Thread;
 
-Task::~Task() {
+ITask::~ITask() {
 
 }
 
-CThread::CThread() :
-        _thread(CThread::thread_func, this) {
+Worker::Worker() :
+        _thread(Worker::thread_func, this) {
     _thread.detach();
 }
 
-CThread::~CThread() {
+Worker::~Worker() {
 
 }
 
-void CThread::thread_func(CThread *t) {
+void Worker::thread_func(Worker *t) {
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     t->onStart();
     while (t->_isrun) {
@@ -32,20 +32,19 @@ void CThread::thread_func(CThread *t) {
     t->onEnd();
 }
 
-void CThread::stop() {
+void Worker::stop() {
     _isrun = false;
     _thread.join();
 }
 
-void CThread::run(TaskPtr task) {
-    task->process();
+void Worker::run(TaskPtr task) {
+    task->run();
 }
 
-void CThread::executeTask(TaskPtr task) {
+void Worker::execute(TaskPtr task) {
     _waitTasks.push(task);
 }
-
-TaskPtr CThread::popWaitTask() {
+TaskPtr Worker::popWaitTask() {
     TaskPtr task;
     if (!_waitTasks.tryPop(task))
         return nullptr;
@@ -61,7 +60,7 @@ ThreadPool::~ThreadPool() {
 
 void ThreadPool::create(int count) {
     for (int i = 0; i < count; ++i) {
-        CThread *t = createThread();
+        Worker *t = createThread();
         if (t) {
             _threads.push_back(t);
         }
@@ -69,18 +68,17 @@ void ThreadPool::create(int count) {
 }
 
 void ThreadPool::exit() {
-    for (CThread *t: _threads) {
+    for (Worker *t: _threads) {
         t->stop();
         deleteThread(t);
     }
     _threads.clear();
 }
 
-void ThreadPool::addTask(TaskPtr task, int threadHashCode) {
+void ThreadPool::executeTask(TaskPtr task, int threadHashCode) {
     int threadIndex = threadHashCode % (int)_threads.size();
-    _threads[threadIndex]->executeTask(std::move(task));
+    _threads[threadIndex]->run(std::move(task));
 }
-
 
 void ThreadPool::update() {
     TaskPtr task;

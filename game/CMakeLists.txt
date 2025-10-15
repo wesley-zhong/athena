@@ -17,7 +17,7 @@ set(ENGINE_NETWORK ${ENGINE_DIR}/network)
 set(ENGINE_SERVERIAL ${ENGINE_DIR}/serialization)
 set(ENGINE_UTILS ${ENGINE_DIR}/utils)
 set(PROTO_GEN ${PROJECT_SOURCE_DIR}/progen)
-
+find_package(protobuf CONFIG REQUIRED)
 
 include_directories(
         ${SOL2}/include
@@ -52,7 +52,7 @@ aux_source_directory(${PROTO_GEN}  PROTO_OBJS)
 link_directories(${PROJECT_SOURCE_DIR}/../libs)
 
 #set(protobuf_DIR "d:/temp/camke")
-find_package(protobuf CONFIG REQUIRED)
+
 
 set (PROJECT_LINK_LIBS  mysqlclient  hiredis  engine-lua protobuf::libprotobuf)
 message("======== begin to configure game objs: ${PROTO_OBJS}")

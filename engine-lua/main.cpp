@@ -10,7 +10,6 @@ extern "C" {
 #include "sol/sol.hpp"
 #include "pb.h"
 
-#include "CommonPool.h"
 #include <map>
 
 extern void luabind_netserver(sol::state & lua);

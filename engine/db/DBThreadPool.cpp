@@ -36,7 +36,7 @@ DBSqlTask::~DBSqlTask()
 
 }
 
-void DBSqlTask::process()
+void DBSqlTask::run()
 {
 	_ret = _pre->prepare(static_cast<DBInterfaceMysql *>(_dbi)->mysql());
 	DBResult* result = (DBResult*)(_result.get());
@@ -72,7 +72,7 @@ DBRedisTask::~DBRedisTask()
 
 }
 
-void DBRedisTask::process()
+void DBRedisTask::run()
 {
 	DBResult* result = (DBResult*)(_result.get());
 	_ret = static_cast<DBInterfaceRedis *>(_dbi)->execute(_command.get(), result);
@@ -136,7 +136,7 @@ void DBThread::onEnd()
 void DBThread::run(TaskPtr task)
 {
 	static_cast<DBTask*>(task.get())->dbi(m_db);
-	CThread::run(task);
+	Worker::run(task);
 }
 
 DBThreadPool::DBThreadPool(DBConfig config)
@@ -149,12 +149,12 @@ DBThreadPool::~DBThreadPool()
 	
 }
 
-CThread* DBThreadPool::createThread()
+Worker* DBThreadPool::createThread()
 {
 	return new DBThread();
 }
 
-void DBThreadPool::deleteThread(CThread * t)
+void DBThreadPool::deleteThread(Worker * t)
 {
 	delete t;
 }

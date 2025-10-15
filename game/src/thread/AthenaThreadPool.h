@@ -7,15 +7,15 @@
 
 #include "common/ThreadPool.h"
 
-class AthenaThread : public  Thread::CThread{
+class AthenaThread : public  Thread::Worker{
 
 };
 
 class AthenaThreadPool : public Thread::ThreadPool {
 public:
-    Thread::CThread *createThread() ;
+    Thread::Worker *createThread() ;
 
-    void deleteThread(Thread::CThread *t);
+    void deleteThread(Thread::Worker *t);
 
     void completeTask(Thread::TaskPtr task) ;
 };

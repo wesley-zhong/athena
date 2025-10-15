@@ -3,12 +3,12 @@
 //
 
 #include "AthenaThreadPool.h"
-Thread::CThread *AthenaThreadPool::createThread(){
-    return new Thread::CThread();
+Thread::Worker *AthenaThreadPool::createThread(){
+    return new Thread::Worker();
 
 }
 
-void AthenaThreadPool::deleteThread(Thread::CThread *t){
+void AthenaThreadPool::deleteThread(Thread::Worker *t){
 
 }
 

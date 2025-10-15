@@ -27,7 +27,7 @@ class RedisResult;
 class SqlPrepare;
 class SqlResultSet;
 
-class DBTask : public Task
+class DBTask : public ITask
 {
 public:
 	DBTask();
@@ -48,7 +48,7 @@ public:
 	DBSqlTask(std::shared_ptr<SqlPrepare> pre, std::shared_ptr <SqlResultSet> result);
 	~DBSqlTask();
 
-	virtual void process();
+	virtual void run();
 	virtual void complete();
 public:
 	std::function<void(int32, const char*, std::shared_ptr<SqlResultSet>)> backfunc;
@@ -63,7 +63,7 @@ public:
 	DBRedisTask(std::shared_ptr<RedisCommand> command, std::shared_ptr <RedisResult> result);
 	~DBRedisTask();
 
-	virtual void process();
+	virtual void run();
 	virtual void complete();
 public:
 	std::function<void(int32, const char*, std::shared_ptr<RedisResult>)> backfunc;
@@ -72,7 +72,7 @@ private:
 	std::shared_ptr<RedisResult> _result;
 };
 
-class DBThread : public CThread
+class DBThread : public Worker
 {
 public:
 	DBThread();
@@ -91,8 +91,8 @@ class DBThreadPool : public ThreadPool
 public:
 	DBThreadPool(DBConfig config);
 	~DBThreadPool();
-	virtual CThread* createThread();
-	virtual void deleteThread(CThread * t);
+	virtual Worker* createThread();
+	virtual void deleteThread(Worker * t);
 	virtual void completeTask(TaskPtr task);
 
 	const DBConfig * getConfig();

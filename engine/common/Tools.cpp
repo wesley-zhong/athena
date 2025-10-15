@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include "Define.h"
+#include <memory>
+
 
 #if defined  __linux__ || defined __APPLE__
 #include <unistd.h>
