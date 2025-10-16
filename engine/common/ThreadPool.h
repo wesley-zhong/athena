@@ -3,8 +3,10 @@
 #include <vector>
 #include <thread>
 #include "TQueue.h"
-#include "ObjPool.h"
+#include "ObjectPool.h"
 #include "XLog.h"
+#include "BaseType.h"
+#include "ObjectPool.hpp"
 
 namespace Thread {
     class ITask {
@@ -13,36 +15,35 @@ namespace Thread {
 
         virtual void run() = 0;
     };
+    typedef  std::unique_ptr<ITask> TaskPtr;
 
-    template<typename F>
-    class TaskImpl : public ITask {
+    class RunTask : public ITask {
     public:
-        explicit TaskImpl(F &&f) : func_(std::forward<F>(f)) {
+        explicit RunTask(const VOID_FUN &func) : _func(std::move(func)) {
         }
 
-        explicit TaskImpl(F &f) : func_(std::forward<F>(f)) {
+        explicit RunTask() {
         }
 
-
-        void run() override { func_(); }
-
-        ~TaskImpl() override {
-            _pool->release(this, false);
+        void run() override {
+            _func();
         }
 
-        static std::shared_ptr<ITask> create(F &&f) {
-            return _pool->acquirePtr(std::forward<F>(f));
+        ~RunTask() override {
+            ObjPool::release<RunTask>(this, false);
+        }
+
+        static TaskPtr create(const VOID_FUN &func) {
+            return ObjPool::acquireUniquePtr<RunTask>(func);
         }
 
     private:
-        F func_;
-        static ObjPool<TaskImpl<F> > *_pool;
+        VOID_FUN _func;
     };
 
-    template<typename F>
-    ObjPool<TaskImpl<F> > *TaskImpl<F>::_pool = new ObjPool<TaskImpl<F> >();
 
-    typedef std::shared_ptr<ITask> TaskPtr;
+
+
 
     class ThreadPool;
 
@@ -87,12 +88,11 @@ namespace Thread {
 
         void executeTask(TaskPtr task, int threadHashCode = 0) const;
 
-        template<typename F>
-        void execute(F &&run, int threadHashCode = 0) {
+
+        void execute(const VOID_FUN &run, int threadHashCode = 0) {
             int threadIndex = threadHashCode % (int) _threads.size();
-            //   auto funcTask = std::make_shared<TaskImpl<F> >(run);
-            auto it = TaskImpl<F>::create(std::forward<F>(run));
-            _threads[threadIndex]->execute(it);
+            auto it = RunTask::create((VOID_FUN)run);
+            _threads[threadIndex]->execute(std::move(it));
         }
 
     protected:

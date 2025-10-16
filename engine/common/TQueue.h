@@ -29,26 +29,21 @@ assert(front == nullptr);           // Returns nullptr if the queue was empty
 */
 
 template<typename T>
-class TQueue
-{
+class TQueue {
 public:
-	TQueue(int maxSize = 15) :
-		mqueue(maxSize)
-	{
-	
-	}
-	void push(const T& object)
-	{
-		mqueue.enqueue(object);
-	}
+    TQueue(int maxSize = 15) : mqueue(maxSize) {
+    }
 
-	bool tryPop(T& object)
-	{
-		return mqueue.try_dequeue(object);
-	}
+    void push(T &&object) {
+        mqueue.enqueue(std::move(object));
+    }
+
+    bool tryPop(T &object) {
+        return mqueue.try_dequeue(object);
+    }
 
 private:
-	moodycamel::ConcurrentQueue<T> mqueue;
+    moodycamel::ConcurrentQueue<T> mqueue;
 };
 
 #endif

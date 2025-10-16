@@ -15,7 +15,7 @@ public:
         this->pid = pid;
     }
     ~GameRole() {
-      INFO_LOG("------ CALL DE");
+      INFO_LOG("------ CALL  ~GameRole");
     };
     uint32_t  getPid(){
         return pid;

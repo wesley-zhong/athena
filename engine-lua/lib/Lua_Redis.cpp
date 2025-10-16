@@ -131,7 +131,7 @@ public:
 
 	void addToPool(DBThreadPool * pool, std::function<void(int32, const char* , Lua_RedisResult *)> backfunc)
 	{
-		std::shared_ptr<DBRedisTask> dbTask(new DBRedisTask(m_command, std::make_shared<RedisResult>()));
+		auto dbTask = new DBRedisTask(m_command, std::unique_ptr<RedisResult>());
 
 		// back func
 		dbTask->backfunc = [backfunc](int32 errno_, const char * err, std::shared_ptr<RedisResult> result) {
@@ -142,7 +142,7 @@ public:
 				backfunc(errno_, err, &_result);
 			}
 		};
-		pool->executeTask(dbTask);
+		pool->executeTask(std::unique_ptr<DBRedisTask>(dbTask));
 	}
 
 private:

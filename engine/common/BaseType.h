@@ -1,6 +1,8 @@
 #ifndef BASETYPE_H
 #define BASETYPE_H
 
+#include <functional>
+
 #include "stdint.h"
 
 typedef int8_t int8;
@@ -15,6 +17,7 @@ typedef uint32_t uint32;
 typedef int64_t int64;
 typedef uint64_t uint64;
 
+using VOID_FUN = std::function<void()>;
 
 
 #endif

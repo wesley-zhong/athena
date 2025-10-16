@@ -1,7 +1,6 @@
 #include "ThreadPool.h"
 #include <thread>
 #include <utility>
-#include<memory.h>
 
 using namespace Thread;
 
@@ -21,7 +20,7 @@ void Worker::thread_func(Worker *t) {
     while (t->_isrun) {
         TaskPtr task = t->popWaitTask();
         if (task != nullptr) {
-            t->run(task);
+            t->run(std::move(task));
             continue;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -39,7 +38,7 @@ void Worker::run(TaskPtr task) {
 }
 
 void Worker::execute(TaskPtr task) {
-    _waitTasks.push(task);
+    _waitTasks.push(std::move(task));
 }
 
 TaskPtr Worker::popWaitTask() {
