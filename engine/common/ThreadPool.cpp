@@ -20,7 +20,7 @@ void Worker::thread_func(Worker *t) {
     while (t->_isrun) {
         TaskPtr task = t->popWaitTask();
         if (task != nullptr) {
-            t->run(std::move(task));
+            t->run(task);
             continue;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
