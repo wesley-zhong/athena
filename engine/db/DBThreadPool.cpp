@@ -135,8 +135,8 @@ void DBThread::onEnd()
 
 void DBThread::run(TaskPtr task)
 {
-	static_cast<DBTask*>(task.get())->dbi(m_db);
-	Worker::run(std::move(task));
+	static_cast<DBTask*>(task)->dbi(m_db);
+	Worker::run(task);
 }
 
 DBThreadPool::DBThreadPool(DBConfig config)

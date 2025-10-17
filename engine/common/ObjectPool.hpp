@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ObjectPool.h"
+#include "BaseType.h"
 
 namespace ObjPool {
     template<typename T>
@@ -23,13 +24,26 @@ namespace ObjPool {
         return getPool<T>().acquirePtr(std::forward<Args>(args)...);
     }
 
+    template<typename T, typename... Args>
+    std::unique_ptr<typename ObjectPool<T>::PoolObjPtr> acquireUniquePtr(Args &&... args) {
+        return getPool<T>().acquireUniquePtr(std::forward<Args>(args)...);
+    }
+
     template<typename T>
     void release(T *ptr, bool callDestructure) {
         getPool<T>().release(ptr, callDestructure);
     }
 
-    template<typename T, typename... Args>
-    std::unique_ptr<T> acquireUniquePtr(Args &&... args) {
-        return getPool<T>().acquireUniquePtr(std::forward<Args>(args)...);
-    }
+    template<typename T>
+    class PoolObjClass {
+    public:
+        template<typename... Args>
+        static T *create(Args &&... args) {
+            return acquirePtr<T>(std::forward<Args>(args)...);
+        }
+
+        static void recycle(T *ptr) {
+            release<T>(ptr, true);
+        }
+    };
 }

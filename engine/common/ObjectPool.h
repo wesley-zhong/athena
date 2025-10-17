@@ -15,7 +15,6 @@
 
 template<typename T>
 class ObjectPool {
-private:
     struct Node {
         T *obj;
         Node *next;
@@ -85,7 +84,6 @@ public:
             _freeCount.fetch_sub(1, std::memory_order_relaxed);
             _hitCount.fetch_add(1, std::memory_order_relaxed);
             T *obj = n->obj;
-            obj->~T();
             new(obj) T(std::forward<Args>(args)...);
             if (_debug) {
                 //  INFO_LOG("[Pool] Hit, reuse obj {} ", *obj);
@@ -113,7 +111,6 @@ public:
             _freeCount.fetch_sub(1, std::memory_order_relaxed);
             _hitCount.fetch_add(1, std::memory_order_relaxed);
             T *obj = n->obj;
-            obj->~T();
             new(obj) T(std::forward<Args>(args)...);
             INFO_LOG("[Pool] {} Hit, reuse obj {} ", fmt::ptr(this), fmt::ptr(obj));
             return obj;
@@ -132,27 +129,9 @@ public:
 
 
     template<typename... Args>
-    std::unique_ptr<T> acquireUniquePtr(Args &&... args) {
-        Node *n = popNodeFromHead();
-        if (n) {
-            _freeCount.fetch_sub(1, std::memory_order_relaxed);
-            _hitCount.fetch_add(1, std::memory_order_relaxed);
-            T *obj = n->obj;
-           // obj->~T();
-            new(obj) T(std::forward<Args>(args)...);
-            INFO_LOG("[Pool] {} Hit, reuse obj {} ", fmt::ptr(this), fmt::ptr(obj));
-            return std::unique_ptr<T>(obj);
-        }
-        _missCount.fetch_add(1, std::memory_order_relaxed);
-        auto up = std::make_unique<T>(std::forward<Args>(args)...);
-        T *obj = up.get();
-        {
-            std::lock_guard<std::mutex> lk(_allocMutex);
-            _ownedObjects.push_back(std::move(up));
-        }
-        _allocCountObj.fetch_add(1, std::memory_order_relaxed);
-        INFO_LOG("[Pool]{} Miss, new obj {} ", fmt::ptr(this), fmt::ptr(obj));
-        return std::unique_ptr<T>(obj);
+    std::unique_ptr<PoolObjPtr> acquireUniquePtr(Args &&... args) {
+        PoolObjPtr sharedPtr = acquire(std::forward<Args>(args)...);
+        return std::make_unique<PoolObjPtr>(sharedPtr);
     }
 
     void release(T *obj, bool callDestructure = false) noexcept {
@@ -298,23 +277,6 @@ private:
     T *_obj;
     ObjectPool *_pool;
 };
-
-// namespace ObjPool {
-//     template<typename T>
-//     void initSize(int minSize, int maxSize);
-//
-//     template<typename T, typename... Args>
-//     typename ObjectPool<T>::PoolObjPtr acquire(Args &&... args);
-//
-//     template<typename T, typename... Args>
-//     T *acquirePtr(Args &&... args);
-//
-//     template<typename T>
-//     void release(T *ptr, bool callDestructure = false);
-//
-//     template<typename T, typename... Args>
-//     std::unique_ptr<T> acquireUniquePtr(Args &&... args);
-// };
 
 
 #endif //ATHENA_OBJPOOL_H

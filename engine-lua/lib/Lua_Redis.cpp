@@ -142,7 +142,7 @@ public:
 				backfunc(errno_, err, &_result);
 			}
 		};
-		pool->executeTask(std::unique_ptr<DBRedisTask>(dbTask));
+		pool->executeTask(dbTask);
 	}
 
 private:

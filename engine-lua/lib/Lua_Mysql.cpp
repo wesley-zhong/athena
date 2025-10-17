@@ -47,7 +47,7 @@ public:
     }
 
     void addToPool(DBThreadPool *pool, std::function<void(int32, const char *, Lua_SqlResult *)> backfunc) {
-        auto dbTask = std::unique_ptr<DBSqlTask> (new DBSqlTask(m_sqlPre, std::unique_ptr<SqlResultSet>()));
+        auto dbTask = new DBSqlTask(m_sqlPre, std::unique_ptr<SqlResultSet>());
 
         // back func
         dbTask->backfunc = [backfunc](int32 errno_, const char *err, std::shared_ptr<SqlResultSet> result) {
@@ -56,7 +56,7 @@ public:
                 backfunc(errno_, err, &_result);
             }
         };
-        pool->executeTask(std::move(dbTask));
+        pool->executeTask(dbTask);
     }
 
     // push

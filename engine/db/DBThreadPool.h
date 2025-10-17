@@ -50,6 +50,9 @@ public:
 
 	virtual void run();
 	virtual void complete();
+	virtual void release() override {
+
+	}
 public:
 	std::function<void(int32, const char*, std::shared_ptr<SqlResultSet>)> backfunc;
 private:
@@ -65,6 +68,9 @@ public:
 
 	virtual void run();
 	virtual void complete();
+	virtual void release() override {
+
+	};
 public:
 	std::function<void(int32, const char*, std::shared_ptr<RedisResult>)> backfunc;
 private:

@@ -9,17 +9,25 @@
 #include "ObjectPool.hpp"
 
 namespace Thread {
+    class RunTask;
+
     class ITask {
     public:
         virtual ~ITask();
 
         virtual void run() = 0;
-    };
-    typedef  std::unique_ptr<ITask> TaskPtr;
 
-    class RunTask : public ITask {
+        virtual void release() =0;
+    };
+
+    typedef ITask *TaskPtr;
+
+    class RunTask : public ITask, public ObjPool::PoolObjClass<RunTask> {
     public:
-        explicit RunTask(const VOID_FUN &func) : _func(std::move(func)) {
+        explicit RunTask(VOID_FUN &&func) : _func(std::forward<VOID_FUN>(func)) {
+        }
+
+        explicit RunTask(const VOID_FUN &func) : _func(func) {
         }
 
         explicit RunTask() {
@@ -27,23 +35,19 @@ namespace Thread {
 
         void run() override {
             _func();
+            release();
+        }
+
+        void release() override {
+            recycle(this);
         }
 
         ~RunTask() override {
-            ObjPool::release<RunTask>(this, false);
-        }
-
-        static TaskPtr create(const VOID_FUN &func) {
-            return ObjPool::acquireUniquePtr<RunTask>(func);
         }
 
     private:
         VOID_FUN _func;
     };
-
-
-
-
 
     class ThreadPool;
 
@@ -91,8 +95,8 @@ namespace Thread {
 
         void execute(const VOID_FUN &run, int threadHashCode = 0) {
             int threadIndex = threadHashCode % (int) _threads.size();
-            auto it = RunTask::create((VOID_FUN)run);
-            _threads[threadIndex]->execute(std::move(it));
+            auto it = RunTask::create((VOID_FUN) run);
+            _threads[threadIndex]->execute(it);
         }
 
     protected:
