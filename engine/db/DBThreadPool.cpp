@@ -113,16 +113,16 @@ void DBThread::onStart()
 
 	//const DBConfig * config = pool->getConfig();
     // Todo  only for just now
-    const DBConfig * config = new DBConfig();
-    if (config->device == "mysql")
-	{
-		m_db = new DBInterfaceMysql(config->ip.c_str(), config->dbname.c_str(), config->user.c_str(), config->pswd.c_str(), config->port);
-	}
-	else
-	{
-		m_db = new DBInterfaceRedis(config->ip.c_str(), config->port);
-	}
-	
+ //    const DBConfig * config = new DBConfig();
+ //    if (config->device == "mysql")
+	// {
+	// 	m_db = new DBInterfaceMysql(config->ip.c_str(), config->dbname.c_str(), config->user.c_str(), config->pswd.c_str(), config->port);
+	// }
+	// else
+	// {
+	// 	m_db = new DBInterfaceRedis(config->ip.c_str(), config->port);
+	// }
+	//
 	m_db->connect();
 }
 

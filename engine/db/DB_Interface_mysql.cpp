@@ -6,8 +6,8 @@
 #include "MysqlResult.h"
 #include "SqlPrepare.h"
 
-DBInterfaceMysql::DBInterfaceMysql(const char *host, const char *dbname, const char *user, const char *pswd,
-                                   unsigned int port) : DB_Interface(host, port) {
+    DBInterfaceMysql::DBInterfaceMysql(const char *host, unsigned int port,const char *dbname, const char *user, const char *pswd
+                                   ) : DB_Interface(host, port) {
     m_dbname = dbname;
     m_user = user;
     m_pswd = pswd;

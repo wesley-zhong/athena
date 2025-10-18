@@ -12,7 +12,7 @@ class RedisCommand;
 class DBInterfaceRedis : public DB_Interface
 {
 public:
-	DBInterfaceRedis(const char * ip, unsigned int port);
+	DBInterfaceRedis(const char * ip, unsigned int port,const char *dbname, const char *user, const char *pswd);
 	~DBInterfaceRedis();
 
 	virtual bool connect();

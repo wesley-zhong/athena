@@ -6,7 +6,7 @@
 #include <vector>
 #include "RedisCommand.h"
 
-DBInterfaceRedis::DBInterfaceRedis(const char *ip, unsigned int port) : DB_Interface(ip, port)
+DBInterfaceRedis::DBInterfaceRedis(const char * ip, unsigned int port,const char *dbname, const char *user, const char *pswd) : DB_Interface(ip, port)
 {
 	m_context = NULL;
 }
@@ -45,7 +45,8 @@ bool DBInterfaceRedis::detach()
 	return true;
 }
 
-int DBInterfaceRedis::execute(DBResult *result, const char *cmd, int len)
+int DBInterfaceRedis::
+execute(DBResult *result, const char *cmd, int len)
 {
 	redisReply *pRedisReply = (redisReply *)redisCommand(m_context, cmd);
 	if (m_context->err)

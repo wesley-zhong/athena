@@ -1,13 +1,5 @@
 #pragma once
 
-/************************************************************************
-* @file      DB_Interface.h
-* @brief     db interface
-* @author    jiangwang
-* @data      2020-3-31
-* @version   0.1
-************************************************************************/
-
 class DBResult;
 class DB_Interface
 {

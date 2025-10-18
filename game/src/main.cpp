@@ -12,6 +12,7 @@
 #include "hv/TcpServer.h"
 #include "thread/AthenaThreadPool.h"
 #include "common/ObjectPool.hpp"
+#include "db/Dal.hpp"
 
 using namespace hv;
 
@@ -20,6 +21,8 @@ int main(int argc, char **argv) {
     //    AthenaTcpServer athenaTcpServer;
     //    athenaTcpServer.start(30001);
 
+    std::string ip = "172.18.2.101";
+    Dal::Cache::init(ip, 6379,"","","");
 
     //     RingBuffer<int *> *pRingBuf = new RingBuffer<int *>(3);
     //     int i1 = 1;
