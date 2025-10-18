@@ -3,7 +3,6 @@
 #include <vector>
 #include <thread>
 #include "TQueue.h"
-#include "ObjectPool.h"
 #include "XLog.h"
 #include "BaseType.h"
 #include "ObjectPool.hpp"

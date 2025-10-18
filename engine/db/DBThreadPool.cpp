@@ -46,6 +46,7 @@ void DBSqlTask::run()
 		_errno = _dbi->getErrno();
 		_error = _dbi->getError();
 	}
+	//recycle(this);
 }
 
 void DBSqlTask::complete()

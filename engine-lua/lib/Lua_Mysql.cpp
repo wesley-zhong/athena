@@ -5,6 +5,7 @@
 #include "MysqlResult.h"
 #include "SqlPrepare.h"
 #include "DBThreadPool.h"
+#include "ThreadPool.h"
 #include "SqlResultSet.h"
 
 class Lua_SqlResult {
@@ -48,6 +49,8 @@ public:
 
     void addToPool(DBThreadPool *pool, std::function<void(int32, const char *, Lua_SqlResult *)> backfunc) {
         auto dbTask = new DBSqlTask(m_sqlPre, std::unique_ptr<SqlResultSet>());
+
+        auto  dbTaskNew =
 
         // back func
         dbTask->backfunc = [backfunc](int32 errno_, const char *err, std::shared_ptr<SqlResultSet> result) {
