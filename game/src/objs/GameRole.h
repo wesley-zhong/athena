@@ -1,7 +1,8 @@
 #ifndef GAME_ROLE_HPP_
 #define GAME_ROLE_HPP_
+#include "ObjectPool.hpp"
 #include "XLog.h"
-class GameRole
+class GameRole :public  ObjPool::PoolObjClass<GameRole>
 {
 private:
    uint32_t  pid;

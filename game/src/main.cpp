@@ -76,12 +76,10 @@ int main(int argc, char **argv) {
         INFO_LOG("thread test 2={}", i);
     }, 2);
 
-
-    // ObjPool<GameRole> *ptrGameRolePoolPtr = new ObjPool<GameRole>(1, 2);
-    // {
-    //     auto ptr = ptrGameRolePoolPtr->acquire(100);
-    //     INFO_LOG("pool obj GameRole test  pid ={}", ptr->getPid());
-    // }
+    {
+        ObjectPool<GameRole>::PoolObjRef ref= ObjPool::acquire<GameRole>(100);
+        INFO_LOG("pool obj GameRole test  pid ={}", ref->getPid());
+    }
     INFO_LOG("==========================  wait release");
     std::this_thread::sleep_for(std::chrono::seconds(5));
     threadPool->execute([]() {
@@ -99,6 +97,10 @@ int main(int argc, char **argv) {
         INFO_LOG(" thread test 1={}", 1);
     }, 1);
 
+    {
+      ObjectPool<GameRole>::PoolObjRef  poolRef =  GameRole::claim(888);
+        INFO_LOG("pool obj GameRole test  pid ={}", poolRef->getPid());
+    }
    std::this_thread::sleep_for(std::chrono::seconds(1));
     return 0;
 }

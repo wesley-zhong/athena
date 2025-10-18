@@ -6,9 +6,8 @@
 #include <string>
 #include <vector>
 #include <cstring>
-#include "PoolObject.h"
 
-class CBuffer : public PoolObject, public std::vector<uint8> {
+class CBuffer : public std::vector<uint8> {
 public:
 	void zero() {}
 	void release() {}

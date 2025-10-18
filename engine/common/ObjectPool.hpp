@@ -37,7 +37,7 @@ class ObjectPool {
     bool _debug = false;
 
 public:
-    class PoolObjPtr;
+    class PoolObjRef;
 
     explicit ObjectPool(size_t initial = 0, size_t maxSize = 0)
         : _maxSize(maxSize) {
@@ -76,7 +76,7 @@ public:
     }
 
     template<typename... Args>
-    PoolObjPtr acquire(Args &&... args) {
+    PoolObjRef acquire(Args &&... args) {
         Node *n = popNodeFromHead();
         if (n) {
             _freeCount.fetch_sub(1, std::memory_order_relaxed);
@@ -86,7 +86,7 @@ public:
             if (_debug) {
                 //  INFO_LOG("[Pool] Hit, reuse obj {} ", *obj);
             }
-            return PoolObjPtr(obj, this);
+            return PoolObjRef(obj, this);
         }
         _missCount.fetch_add(1, std::memory_order_relaxed);
         auto up = std::make_unique<T>(std::forward<Args>(args)...);
@@ -99,7 +99,7 @@ public:
         if (_debug) {
             // INFO_LOG("[Pool] Miss, new obj {} ", *obj);
         }
-        return PoolObjPtr(obj, this);
+        return PoolObjRef(obj, this);
     }
 
     template<typename... Args>
@@ -127,9 +127,9 @@ public:
 
 
     template<typename... Args>
-    std::unique_ptr<PoolObjPtr> acquireUniquePtr(Args &&... args) {
-        PoolObjPtr sharedPtr = acquire(std::forward<Args>(args)...);
-        return std::make_unique<PoolObjPtr>(sharedPtr);
+    std::unique_ptr<PoolObjRef> acquireUniquePtr(Args &&... args) {
+        PoolObjRef sharedPtr = acquire(std::forward<Args>(args)...);
+        return std::make_unique<PoolObjRef>(sharedPtr);
     }
 
     void release(T *obj, bool callDestructure = false) noexcept {
@@ -228,24 +228,24 @@ private:
 
 // RAII handle
 template<typename T>
-class ObjectPool<T>::PoolObjPtr {
+class ObjectPool<T>::PoolObjRef {
 public:
-    PoolObjPtr() noexcept : _obj(nullptr), _pool(nullptr) {
+    PoolObjRef() noexcept : _obj(nullptr), _pool(nullptr) {
     }
 
-    PoolObjPtr(T *obj, ObjectPool *pool) noexcept : _obj(obj), _pool(pool) {
+    PoolObjRef(T *obj, ObjectPool *pool) noexcept : _obj(obj), _pool(pool) {
     }
 
-    PoolObjPtr(const PoolObjPtr &) = delete;
+    PoolObjRef(const PoolObjRef &) = delete;
 
-    PoolObjPtr &operator=(const PoolObjPtr &) = delete;
+    PoolObjRef &operator=(const PoolObjRef &) = delete;
 
-    PoolObjPtr(PoolObjPtr &&o) noexcept : _obj(o._obj), _pool(o._pool) {
+    PoolObjRef(PoolObjRef &&o) noexcept : _obj(o._obj), _pool(o._pool) {
         o._obj = nullptr;
         o._pool = nullptr;
     }
 
-    PoolObjPtr &operator=(PoolObjPtr &&o) noexcept {
+    PoolObjRef &operator=(PoolObjRef &&o) noexcept {
         if (this != &o) {
             release();
             _obj = o._obj;
@@ -256,7 +256,7 @@ public:
         return *this;
     }
 
-    ~PoolObjPtr() { release(); }
+    ~PoolObjRef() { release(); }
 
     T *operator->() const noexcept { return _obj; }
     T &operator*() const noexcept { return *_obj; }
@@ -276,6 +276,7 @@ private:
     ObjectPool *_pool;
 };
 
+
 namespace ObjPool {
     template<typename T>
     ObjectPool<T> &getPool() {
@@ -285,7 +286,7 @@ namespace ObjPool {
 
 
     template<typename T, typename... Args>
-    typename ObjectPool<T>::PoolObjPtr acquire(Args &&... args) {
+    typename ObjectPool<T>::PoolObjRef acquire(Args &&... args) {
         return getPool<T>().acquire(std::forward<Args>(args)...);
     }
 
@@ -295,7 +296,7 @@ namespace ObjPool {
     }
 
     template<typename T, typename... Args>
-    std::unique_ptr<typename ObjectPool<T>::PoolObjPtr> acquireUniquePtr(Args &&... args) {
+    std::unique_ptr<typename ObjectPool<T>::PoolObjRef> acquireUniquePtr(Args &&... args) {
         return getPool<T>().acquireUniquePtr(std::forward<Args>(args)...);
     }
 
@@ -310,6 +311,11 @@ namespace ObjPool {
         template<typename... Args>
         static T *create(Args &&... args) {
             return acquirePtr<T>(std::forward<Args>(args)...);
+        }
+
+        template<typename... Args>
+        static typename ObjectPool<T>::PoolObjRef claim(Args &&... args) {
+            return acquire<T>(std::forward<Args>(args)...);
         }
 
         static void recycle(T *ptr) {
