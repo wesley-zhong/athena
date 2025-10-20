@@ -1,7 +1,7 @@
 #include <chrono>
 #include "sol/sol.hpp"
 #include <iostream>
-
+#include <csignal>
 #include "common/RingBuffer.hpp"
 #include "common/XLog.h"
 #include "network/Dispatcher.h"
@@ -13,16 +13,38 @@
 #include "thread/AthenaThreadPool.h"
 #include "common/ObjectPool.hpp"
 #include "db/Dal.hpp"
-
+#if defined(_WIN32)
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 using namespace hv;
 
+static std::atomic<bool> g_running(true);
+static std::condition_variable g_cv;
+static std::mutex g_mutex;
+
+void handleSignal(int signum) {
+    INFO_LOG("Received signal {} exiting...", signum);
+    g_running = false;
+    g_cv.notify_all(); // 唤醒主线程
+}
+
 int main(int argc, char **argv) {
+    std::signal(SIGTERM, handleSignal);
+    std::signal(SIGINT, handleSignal);
+
     xLogInitLog(LogLevel::LL_INFO, "../logs/game.log");
-    //    AthenaTcpServer athenaTcpServer;
-    //    athenaTcpServer.start(30001);
+    AthenaTcpServer athenaTcpServer;
+    int ret = athenaTcpServer.start(38881, 4);
+    if (ret != 0) {
+        ERR_LOG(" start tpc server ERROR ret  {} ", ret);
+        return -1;
+    }
 
     std::string ip = "172.18.2.101";
-    Dal::Cache::init(ip, 6379,"","","");
+    Dal::Cache::init(ip, 6379, "", "", "");
+    //  Dal::Cache::execute()
 
     //     RingBuffer<int *> *pRingBuf = new RingBuffer<int *>(3);
     //     int i1 = 1;
@@ -77,7 +99,7 @@ int main(int argc, char **argv) {
     }, 2);
 
     {
-        ObjectPool<GameRole>::PoolObjRef ref= ObjPool::acquire<GameRole>(100);
+        ObjectPool<GameRole>::PoolObjRef ref = ObjPool::acquire<GameRole>(100);
         INFO_LOG("pool obj GameRole test  pid ={}", ref->getPid());
     }
     INFO_LOG("==========================  wait release");
@@ -98,9 +120,18 @@ int main(int argc, char **argv) {
     }, 1);
 
     {
-      ObjectPool<GameRole>::PoolObjRef  poolRef =  GameRole::claim(888);
+        ObjectPool<GameRole>::PoolObjRef poolRef = GameRole::claim(888);
         INFO_LOG("pool obj GameRole test  pid ={}", poolRef->getPid());
     }
-   std::this_thread::sleep_for(std::chrono::seconds(1));
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    // 💡 主线程阻塞等待，无限期休眠（CPU 占用≈0）
+    {
+        std::unique_lock<std::mutex> lock(g_mutex);
+        g_cv.wait(lock, [] { return !g_running.load(); });
+    }
+
+    INFO_LOG("service exited");
+
     return 0;
 }

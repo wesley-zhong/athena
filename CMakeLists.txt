@@ -23,8 +23,10 @@ message("begin to compiler Athena ")
 set(ENGINE ${PROJECT_SOURCE_DIR}/engine)
 set(ENGINE-LUA ${PROJECT_SOURCE_DIR}/engine-lua)
 set(GAME ${PROJECT_SOURCE_DIR}/game)
+set(GATEWAY ${PROJECT_SOURCE_DIR}/gateway)
 
 
 add_subdirectory(${ENGINE})
 add_subdirectory(${ENGINE-LUA})
 add_subdirectory(${GAME})
+add_subdirectory(${GATEWAY})
